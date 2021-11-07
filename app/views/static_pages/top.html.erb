@@ -1,2 +1,29 @@
-<h1>StaticPages#top</h1>
-<p>Find me in app/views/static_pages/top.html.erb</p>
+<%= javascript_pack_tag 'static_pages/top' %>
+
+<div class="row justify-content-md-center">
+  <div class="col-5 left">
+    <h2 class="logo secondary">TimeBoxing</h1>
+    <%# <p class="subtitle"> %>
+    <%# </p> %>
+    <p class="secondary"><br>
+      運動、食事、習慣、娯楽、仕事<br>
+      仔細に計画を立て<br>
+      24時間を使い倒しましょう♪<br><br>
+      〜汝、十二時に使われ、我、十二時を使い得たり〜<br><br>
+      アカウントはお持ちですか？
+      <%= link_to "ログイン", login_path, remote: true, class: "btn btn-secondary" %><br>
+      いつの計画を立てますか？
+      <%= link_to "今日", gest_login_path(date: "today"), method: :post, class: "btn btn-secondary" %>
+      or
+      <%= link_to "明日", gest_login_path(date: "tomorrow"), method: :post, class: "btn btn-secondary" %>
+    </p>
+  </div>
+
+  <div class="col-7 right">
+    <canvas id="24clock"></canvas>
+  </div>
+</div>
+
+<div id="login" class="modal" data-keyboard="true" data-backdrop="static"></div>
+
+

@@ -15,6 +15,29 @@
   </head>
 
   <body>
-    <%= yield %>
+    <div class="container">
+      <%# <div class="row"> %>
+        <%# <div class="col-md-12"> %>
+          <div class="header">
+            <nav class="navbar fixed-top bg-secondary">
+              <div class="container-md">
+                <%= link_to "TimeBoxing",  "#", id: "logo", class: "navbar-brand" %>
+                <%# link_to image_tag("user-icon.png", size: "35x35"), "#login_path", class: "btn rounded-circle p-2" %>
+                <% if logged_in? %>
+                  <%= link_to "退出", logout_path, method: :delete, data: {confirm: "すべての予定が削除されます。よろしいですか？"}, class: "nav-link" %>
+                <% end %>
+              </div>
+            </nav>
+          </div>
+          <div class="main">
+            <% flash.each do |message_type, msg| %>
+              <div class="alert alert-<%= message_type %>"><%= msg.html_safe %></div>
+            <% end %>
+            <%= yield %>
+          </div>
+        <%# </div> %>
+      <%# </div> %>
+    <%= debug(params) if Rails.env.development? %>
+    </div>
   </body>
 </html>

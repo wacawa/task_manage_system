@@ -1,0 +1,45 @@
+#logo {
+  font-family: 'Sacramento', cursive;
+  font-size: xx-large;
+  color: white;
+  margin-left: 8%;
+}
+
+nav.navbar {
+  .nav-link {
+    color: white;
+    &:hover {
+      color: white;
+    }
+  }
+}
+
+.secondary {
+  color: #6c757d;
+}
+
+.center-middle {
+  text-align: center;
+  vertical-align: middle;
+}
+
+.btn-close {
+  float: right;
+  margin: 15px;
+}
+
+.d-md-flex {
+  margin: 15px;
+}
+
+.container {
+  position: relative;
+  padding-top: 4rem;
+}
+
+.debug_dump {
+  // clear: both;
+  -moz-box-sizing:    border-box;
+  -webkit-box-sizing: border-box;
+  box-sizing:         border-box;
+}

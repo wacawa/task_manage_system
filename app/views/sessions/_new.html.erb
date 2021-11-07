@@ -1,0 +1,32 @@
+<%# javascript_pack_tag 'sessions/new' %>
+
+<div class="modal-dialog modal-lg">
+  <div class="modal-content">
+    <div class="d-grid gap-2 d-md-flex justify-content-md-end">
+      <%= link_to "", :back, class: "btn-close secondary" %>
+    </div>
+    <div class="modal-body">
+      <div class="row justify-content-md-center">
+        <div class="col-10">
+          <div class="col-7 mx-auto login-email">
+            <%= form_with(scope: :session, url: email_login_path, local: true) do |f| %>
+              <div class="d-grid gap-2">
+                <%= f.email_field :email, placeholder: "メールアドレス", class: "form-control email-form" %>
+                <%= f.password_field :password, placeholder: "パスワード", class: "form-control pass-form" %>
+                <%= f.submit "送信", class: "btn btn-secondary" %>
+              </div>
+            <% end %>
+          </div>
+          <hr>
+          <div class="col-10 mx-auto login-google">
+            <%= link_to image_tag("btn_google_signin.png"), "/auth/google_oauth2", method: :get %>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="d-grid gap-2">
+    <%# <div class="d-md-flex"> %>
+      <%= link_to "閉じる", :back, class: "btn btn-outline-secondary close-btn" %>
+    </div>
+  </div>
+</div>

@@ -1,0 +1,20 @@
+<%= javascript_pack_tag 'users/show' %>
+
+<div class="row justify-content-md-center">
+  <div class="col-md-7">
+    <div class="time-line secondary">
+      <% for t in 0..24 do %>
+        <p class="hour_<%= t %>"><%= " #{t} : 00 " %></p>
+        <% unless true || t == 24 %>
+          <p class="time-line time-line-half"><%= " #{t} : 30 " %></p>
+        <% end %>
+      <% end %>
+    </div>
+  </div>
+</div>
+<div class="footer">
+  <footer>
+    <canvas id="clock"></canvas>
+    <%= debug(params) if Rails.env.development? %>
+  </footer>
+</div>

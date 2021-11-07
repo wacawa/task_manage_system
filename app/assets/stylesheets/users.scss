@@ -1,0 +1,56 @@
+.time-line {
+  font-weight: bold;
+  border-right: thick solid #6c757d;
+  text-align: right;
+  display: inline-block;
+  p[class^="hour_"] {
+    border-bottom: dotted #6c757d;
+    padding-right: 80px;
+    margin: 100px 0px;
+    margin-right: -50px;
+  }
+}
+
+hr {
+	color: #6c757d;
+  overflow: visible;
+	text-align: center;
+}
+
+hr::after {
+	position: relative;
+	content: "or";
+	color: #6c757d;
+	background-color: white;
+	padding: 0 20px;
+	top: -13px;
+}
+
+.footer {
+  position: fixed;
+  right: 10%;
+  bottom: 0;
+}
+
+.login-email {
+  padding-bottom: 25px;
+}
+
+.login-google {
+  padding-top: 15px;
+  padding-bottom: 25px;
+  text-align: center;
+}
+
+.form-control {
+  margin-bottom: 5px;
+}
+
+.close-btn {
+  margin-bottom: 5px;
+}
+
+
+
+
+
