@@ -3,10 +3,13 @@ class SessionsController < ApplicationController
   end
 
   def create
+    password = SecureRandom.urlsafe_base64
     user = User.from_omniauth(request.env["omniauth.auth"])
+    user.id = User.count + 1
+    user.password = password
     if user.save
       login(user)
-      params[:session][:remember_me] == "1" ? remember(user) : forget(user)
+      remember(user)
       redirect_to user_url(user)
     else
       render :new
@@ -17,7 +20,8 @@ class SessionsController < ApplicationController
     user = User.find_by(email: params[:session][:email])
     if user && user.authenticate(params[:session][:password])
       login(user)
-      params[:session][:remember_me] == "1" ? remember(user) : forget(user)
+      remember(user)
+      # params[:session][:remember_me] == "1" ? remember(user) : forget(user)
       redirect_to user_url(user)
     else
       render :new

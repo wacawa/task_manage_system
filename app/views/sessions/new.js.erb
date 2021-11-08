@@ -1,11 +1,2 @@
 $("#login").html("<%= escape_javascript(render 'new') %>");
 $("#login").show();
-
-let email_form = document.getElementByClass('email-form');
-email_form.addEventListener('keypress', render);
-
-function render(e){
-  if (e.keyCode === 13){
-    $("")
-  }
-}

@@ -6,7 +6,7 @@ Rails.application.routes.draw do
   get 'auth/failure', to: redirect('/')
   post '/gest_login', to: 'static_pages#gest_login'
   post '/email_login', to: 'sessions#create_email'
-  get '/logout', to: 'sessions#destroy'
+  delete '/logout', to: 'sessions#destroy'
 
   resources :users, except: [:new, :create]
 

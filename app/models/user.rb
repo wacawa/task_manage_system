@@ -3,9 +3,9 @@ class User < ApplicationRecord
 
   validates :email, uniqueness: true
   has_secure_password
-  validates :password, presence: true, unless: :google
+  validates :password, presence: true, length: { minimum: 6 }
 
-  def User.digest(string)
+  def self.digest(string)
     cost = 
       if ActiveModel::SecurePassword.min_cost
         BCrypt::Engine::MIN_COST
@@ -15,7 +15,7 @@ class User < ApplicationRecord
     BCrypt::Password.create(string, cost: cost)
   end
 
-  def User.new_token
+  def self.new_token
     SecureRandom.urlsafe_base64
   end
 
@@ -37,7 +37,7 @@ class User < ApplicationRecord
     where(provider: auth.provider, uid: auth.uid).first_or_initialize.tap do |user|
       user.provider = auth.provider
       user.uid = auth.uid
-      user.email = auth.info.email
+      # user.email = auth.info.email
       user.oauth_token = auth.credentials.token
       user.oauth_expires_at = Time.at(auth.credentials.expires_at)
       return user
