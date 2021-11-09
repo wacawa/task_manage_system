@@ -1,7 +1,7 @@
 class StaticPagesController < ApplicationController
   before_action :not_access, only: :top
   before_action :sort_user, only: :gest_login
-
+  
   def top
   end
 
@@ -42,4 +42,5 @@ class StaticPagesController < ApplicationController
       end
     end
   end
+
 end

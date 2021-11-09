@@ -24,7 +24,7 @@ class SessionsController < ApplicationController
       # params[:session][:remember_me] == "1" ? remember(user) : forget(user)
       redirect_to user_url(user)
     else
-      render :new
+      redirect_to root_url(modal: true)
     end
   end
 

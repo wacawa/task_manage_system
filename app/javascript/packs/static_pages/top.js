@@ -1,3 +1,14 @@
+$(window).on("load", function(){
+  if(location.search === "?modal=true"){
+    $.ajax({
+      type: 'GET', // リクエストのタイプ
+      url: '/login', // リクエストを送信するURL
+      // data:  { title: title }, // サーバーに送信するデータ
+      // dataType: 'json' // サーバーから返却される型
+    });
+  };
+});
+
 $(function(){
   var canvas = document.getElementById("24clock");
   var ctx = canvas.getContext('2d');

@@ -23,7 +23,9 @@
               <div class="container-md">
                 <%= link_to "TimeBoxing",  "#", id: "logo", class: "navbar-brand" %>
                 <%# link_to image_tag("user-icon.png", size: "35x35"), "#login_path", class: "btn rounded-circle p-2" %>
-                <% if logged_in? %>
+                <% if logged_in? && @login_user.provider.present? %>
+                  <%= link_to "ログアウト", logout_path, method: :delete, class: "nav-link" %>
+                <% elsif logged_in? %>
                   <%= link_to "退出", logout_path, method: :delete, data: {confirm: "すべての予定が削除されます。よろしいですか？"}, class: "nav-link" %>
                 <% end %>
               </div>
