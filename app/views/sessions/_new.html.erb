@@ -7,12 +7,21 @@
     </div>
     <div class="modal-body">
       <div class="row justify-content-md-center">
-        <div class="col-10">
+        <div class="col-10 secondary">
           <div class="col-7 mx-auto login-email">
             <%= form_with(scope: :session, url: email_login_path, local: true) do |f| %>
+              <% unless @email.nil? %>
+                <ul>
+                  <li>認証に失敗しました。</li>
+                </ul>
+              <% end %>
               <div class="d-grid gap-2">
-                <%= f.email_field :email, placeholder: "メールアドレス", class: "form-control email-form" %>
-                <%= f.password_field :password, placeholder: "パスワード", class: "form-control pass-form" %>
+                <% if @email.blank? %>
+                  <%= f.email_field :email, placeholder: "メールアドレス", class: "form-control" %>
+                <% else %>
+                  <%= f.email_field :email, value: @email, class: "form-control" %>
+                <% end %>
+                <%= f.password_field :password, placeholder: "パスワード", class: "form-control" %>
                 <%= f.submit "送信", class: "btn btn-secondary" %>
               </div>
             <% end %>

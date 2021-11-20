@@ -8,6 +8,9 @@ Rails.application.routes.draw do
   post '/email_login', to: 'sessions#create_email'
   delete '/logout', to: 'sessions#destroy'
 
+  get '/task', to: "tasks#new"
+  post '/task', to: "tasks#create"
+
   resources :users, except: [:new, :create]
 
 end

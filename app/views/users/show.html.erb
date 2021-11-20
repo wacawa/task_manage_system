@@ -1,20 +1,64 @@
 <%= javascript_pack_tag 'users/show' %>
 
-<div class="row justify-content-md-center">
-  <div class="col-md-7">
+<div class="time-boxing">
+  <div class="now-line"></div>
+  <div class="task secondary"></div>
+  <div class="row">
+    <div class="col-md-10 offset-md-1">
+      <div class="axis"></div>
+      <div class="time">
+        <% for h in 0..24 do %>
+          <div class="hour hm_<%= "%02d" % h %>00"><%= "#{h} : 00" %></div>
+          <% if h != 24 %>
+            <% for m in 1..59 do %>
+              <div class="hm_<%= "#{"%02d" % h}#{"%02d" % m}" %> minute"><%= "#{h} : #{"%02d" % m}" if m % 10 == 0 %></div>
+            <% end %>
+          <% end %>
+        <% end %>
+      </div>
+    </div>
+  </div>
+  <div class="addtask">
+    <%= link_to "#" do %>
+      <canvas id="plus" width="100" height="100"></canvas>
+    <% end %>
+  </div>
+</div>
+
+
+<%
+=begin
+%>
+
     <div class="time-line secondary">
       <% for t in 0..24 do %>
+        <% if t < 24 %>
+        <p class="hour_<%= t %> space"><%= " #{t} : 00 " %></p>
+        <% else %>
         <p class="hour_<%= t %>"><%= " #{t} : 00 " %></p>
-        <% unless true || t == 24 %>
-          <p class="time-line time-line-half"><%= " #{t} : 30 " %></p>
+          <%# <div class="space"></div> %>
+        <%# for m in 0..60 do %>
+          <%# <br> %>
+        <%# end %>
         <% end %>
       <% end %>
     </div>
-  </div>
-</div>
-<div class="footer">
+    <div class="absolute col-md-7">
+      <% for m in 1..1440 do %>
+        <% m %= 60 %>
+        <div class="task"><%= m %></div>
+      <% end %>
+    </div>
+
+
+
   <footer>
     <canvas id="clock"></canvas>
     <%= debug(params) if Rails.env.development? %>
   </footer>
 </div>
+
+<%
+=end
+%>
+

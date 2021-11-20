@@ -20,6 +20,7 @@
         <%# <div class="col-md-12"> %>
           <div class="header">
             <nav class="navbar fixed-top bg-secondary">
+            <%# <nav class="navbar bg-secondary"> %>
               <div class="container-md">
                 <%= link_to "TimeBoxing",  "#", id: "logo", class: "navbar-brand" %>
                 <%# link_to image_tag("user-icon.png", size: "35x35"), "#login_path", class: "btn rounded-circle p-2" %>
@@ -39,7 +40,7 @@
           </div>
         <%# </div> %>
       <%# </div> %>
-    <%= debug(params) if Rails.env.development? %>
+    <%# debug(params) if Rails.env.development? %>
     </div>
   </body>
 </html>

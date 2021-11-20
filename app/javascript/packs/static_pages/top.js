@@ -1,11 +1,14 @@
 $(window).on("load", function(){
-  if(location.search === "?modal=true"){
+  var param = location.search
+  if(param.indexOf("email") === 1){
     $.ajax({
       type: 'GET', // リクエストのタイプ
       url: '/login', // リクエストを送信するURL
-      // data:  { title: title }, // サーバーに送信するデータ
+      data: {email: param.split("=")[1]},
       // dataType: 'json' // サーバーから返却される型
     });
+    // var form = document.getElementsByClassName("form-control");
+    // form.classList.add("field_with_errors")
   };
 });
 
