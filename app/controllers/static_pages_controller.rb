@@ -7,6 +7,7 @@ class StaticPagesController < ApplicationController
 
   def gest_login
     user ||= User.new
+    debugger
     if user.id.nil?
       password = SecureRandom.urlsafe_base64
       user.id = User.count + 1

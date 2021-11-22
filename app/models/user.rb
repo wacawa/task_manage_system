@@ -1,4 +1,5 @@
 class User < ApplicationRecord
+  has_many :tasks, dependent: :destroy
   attr_accessor :remember_token
 
   validates :email, uniqueness: true
