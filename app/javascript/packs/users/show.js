@@ -145,44 +145,72 @@ window.addEventListener("load", function(){
   setInterval(now_line, 500);
 }, false);
 
-var data = function(){
-  const navbar = $(".navbar").innerHeight();
-  const elem = $("[class^='hm_']")
-  const elemheight = elem.innerHeight();
-  const sheight = elemheight / 60;
-  return [navbar, sheight, elemheight]
-}
-
-var date = function(){
+var time = function(){
   const now = new Date();
   const hour = now.getHours().toString().padStart(2, '0');
   const minute = now.getMinutes().toString().padStart(2, '0');
-  const second = now.getSeconds();
-  return [hour, minute, second]
+  const second = now.getSeconds().toString().padStart(2, '0');
+  const day = now.getDate().toString().padStart(2, '0');
+  return [hour, minute, second, day]
 }
 
-var margin = function(hour, minute, second, navbar, sheight){
-  const elem = $(".hm_" + hour + minute);
-  const elemtop = Math.floor(elem.offset().top);
-  const px = elemtop - navbar + sheight * second;
-  // const px = elemtop - navbar + elemheight / 2 + sheight * second;
-  return px
+var elemtop = function(hour, minute, second, day){
+  let navbar = $(".navbar").innerHeight();
+  let elem = $(".dhm_" + day + hour + minute);
+  if(elem.length){
+    let sheight = elem.innerHeight() / 60;
+    let elemtop = Math.floor(elem.offset().top) - navbar + sheight * Number(second);
+    let text = time()[0] + ":" + time()[1] + ":" + time()[2];
+    return [elemtop, text]
+  }else{
+    elem = $(".axis").height();
+    let elemtop = elem - $(".now-line").innerHeight() * 3 / 2;
+    let text = "end";
+    return [elemtop, text]
+  }
 }
 
 function now_line(){
-  const dataset = data();
-  // const dateset = date();
-  $(".now-line").css("marginTop", margin(date()[0], date()[1], date()[2], dataset[0], dataset[1]));
-  // $(".now-line").text(dateset[0] + ":" + dateset[1]);
-  $(".now-line").text(date()[0] + ":" + date()[1] + ":" + date()[2].toString().padStart(2, "0"));
+  const nowtop = elemtop(time()[0], time()[1], time()[2], time()[3]);
+  $(".now-line").css("top", nowtop[0]);
+  $(".now-line").text(nowtop[1]);
+  // if(nowtop){
+  //   $(".now-line").text(time()[0] + ":" + time()[1] + ":" + time()[2].toString().padStart(2, "0"));
+  // }else{
+  //   $(".now-line").text("end");
+  // }
+}
+
+function scroll(){
+  const nowtop = elemtop(time()[0], time()[1], time()[2], time()[3]);
+  $(".now-line").css("top", nowtop[0]);
+  if(nowtop[1] != "end"){
+    $(window).scrollTop(nowtop[0] - 200);
+  }else{
+    $(window).scrollTop(nowtop[0]);
+  }
 }
 
 $(function(){
-  const dataset = data();
-  const dateset = date();
-  $(window).scrollTop(margin(dateset[0], dateset[1], dateset[2], dataset[0], dataset[1]) - 200);
-  draw(); 
+  draw();
+  scroll();
+  // console.log()
+  set_task();
 })
+
+function set_task(){
+  $(".task").each(function(){
+    var navbar = $(".navbar").height();
+    var cname_array = $(this).attr("class").split(" ");
+    var cname = cname_array[1].substr(5)
+    var range = cname_array[2].substr(6)
+    var div_height = $(":root").css("--time-div-height").slice(0, -2)
+    range = range * div_height// - div_height / 2;
+    var top = Math.floor($("."+cname).offset().top) - navbar - div_height// * 3 / 4;
+    $(this).css("top", top);
+    $(this).css("height", range);
+  })
+}
 
 function draw() {
   var canvas = document.getElementById('plus');
@@ -208,3 +236,8 @@ function draw() {
     ctx.fill();
   }
 }
+
+
+
+
+

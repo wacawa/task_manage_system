@@ -6,14 +6,16 @@ module SessionsHelper
 
   def remember(user)
     user.remember
-    cookies.signed[:user_id] = {value: user.id, expires: 1.day.from_now}
-    cookies[:remember_token] = {value: user.remember_token, expires: 1.day.from_now}
-  end
-
-  def remember_permanent(user)
-    user.remember
-    cookies.permanent.signed[:user_id] = user.id
-    cookies.permanent[:remember_token] = user.remember_token
+    user_ex_date(user)
+    # cookies.signed[:user_id] = {value: user.id, expires: 1.day.from_now}
+    # cookies[:remember_token] = {value: user.remember_token, expires: 1.day.from_now}
+    if @boolean
+      cookies.signed[:user_id] = {value: user.id, expires: @ex_date}
+      cookies[:remember_token] = {value: user.remember_token, expires: @ex_date}
+    else
+      cookies.permanent.signed[:user_id] = user.id
+      cookies.permanent[:remember_token] = user.remember_token
+    end
   end
 
   def forget(user)
@@ -39,7 +41,6 @@ module SessionsHelper
   end
 
   def logout
-    #@login_user.tasks.delete
     forget(login_user)
     session.delete(:user_id)
     @login_user = nil

@@ -1,47 +1,45 @@
 class StaticPagesController < ApplicationController
   before_action :not_access, only: :top
-  before_action :sort_user, only: :gest_login
   
   def top
   end
 
   def gest_login
-    user ||= User.new
-    debugger
-    if user.id.nil?
-      password = SecureRandom.urlsafe_base64
-      user.id = User.count + 1
-      user.email = "gest#{format("%02d", user.id)}@email.com"
-      user.password = password
-    else
-      #user.tasks.delete
+    user = get_user
+    user.email = "gest#{format("%02d", user.id)}@email.com"
+    user.password = SecureRandom.urlsafe_base64
+    user.expiration_date = DateTime.now.since(1.5.days)
+    # year = user.expiration_date.year
+    # month = user.expiration_date.month
+    # day = user.expiration_date.day
+    # hour = user.expiration_date.hour
+    if user.save
+      redirect_user(user)
     end
-    if params[:date] == "today"
-      user.expiration_date = DateTime.now.since(2.days)
-    else
-      user.expiration_date = DateTime.now.since(3.days)
-    end
-    user.save
-    login(user)
-    remember(user)
-    redirect_to user_url(user)
   end
+
 
   #before_action
     
-  def not_access
-    if login_user.present?
-      redirect_back fallback_location: login_user
-    end
-  end
-
-  def sort_user
-    User.where(provider: nil).each do |u|
-      if u.expiration_date.nil? || u.expiration_date < DateTime.now
-        user = u
-        break
+    def not_access
+      if login_user.present?
+        redirect_back fallback_location: @login_user
       end
     end
-  end
+
+
+  #methods
+
+    def get_user
+      user = User.where(provider: nil).where.not(expiration_date: nil).order(:expiration_date).first
+      user_ex_date(user)
+      if @boolean && @ex_date < DateTime.now
+        id = user.id
+        user.destroy
+      end
+      id ||= User.last.id + 1
+      return User.new(id: id)
+    end
+
 
 end

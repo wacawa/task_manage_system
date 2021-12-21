@@ -1,29 +1,57 @@
 <%= javascript_pack_tag 'users/show' %>
 
-<div class="time-boxing">
+<div class="time-boxing secondary">
   <div class="now-line"></div>
-  <div class="task secondary"></div>
+  <%# <div class="task secondary"></div> %>
+
+  <% @tasks.each do |task| %>
+    <% st = task.start_time %>
+    <% range = ((task.finish_time - task.start_time) / 60).to_i %>
+    <% day = "%02d" % st.day %>
+    <% hour = "%02d" % st.hour %>
+    <% min = "%02d" % st.min %>
+    <% cname1 = "task_dhm_#{day+hour+min}" %>
+    <% cname2 = "range_#{range}" %>
+    <% link_to task_edit_path do %>
+      <div class="task <%= cname1 %> <%= cname2 %>">
+        <h4 class="task-title"><%= task.title %></h4>
+        <div class="memo"><%= task.memo.nil? ? task.memo : safe_join(task.memo.split("\n"),tag(:br)) %></div>
+      </div>
+    <% end %>
+  <% end %>
+
   <div class="row">
     <div class="col-md-10 offset-md-1">
       <div class="axis"></div>
       <div class="time">
-        <% for h in 0..24 do %>
-          <div class="hour hm_<%= "%02d" % h %>00"><%= "#{h} : 00" %></div>
-          <% if h != 24 %>
-            <% for m in 1..59 do %>
-              <div class="hm_<%= "#{"%02d" % h}#{"%02d" % m}" %> minute"><%= "#{h} : #{"%02d" % m}" if m % 10 == 0 %></div>
+        <% day = @day[0] %>
+        <% for hour in [*@hour..@end_hour] do %>
+          <% h = hour % 24 %>
+          <% day = @day[1] if @hour != 0 && h == 0 %>
+          <% d = "%02d" % day %>
+          <% h = "%02d" % h %>
+          <% if hour != @end_hour %>
+            <% for m in 0..59 do %>
+              <% cname = m == 0 ? "hour" : "" %>
+              <% m = "%02d" % m %>
+              <% dhm = "dhm_#{d+h+m}" %>
+              <div class="<%= dhm %> <%= cname %>"><%= "#{h.to_i} : #{m}" if m == "00" %></div>
             <% end %>
+          <% else %>
+            <div class="<%= d+h %>00 hour"><%= "#{h.to_i} : 00" %></div>
           <% end %>
         <% end %>
       </div>
     </div>
   </div>
   <div class="addtask">
-    <%= link_to "#" do %>
+    <%= link_to new_user_task_path(@user, day: @day[0], hour: @hour), remote: true do %> 
       <canvas id="plus" width="100" height="100"></canvas>
     <% end %>
   </div>
 </div>
+
+<div class="modal"></div>
 
 
 <%

@@ -1,0 +1,28 @@
+h3 {
+  text-align: center;
+}
+
+.table {
+  input {
+    color: #6c757d;
+  }
+  textarea {
+    color: #6c757d;
+  }
+}
+
+.form-control {
+  vertical-align: middle;
+}
+
+[class^="form-"], .minustr {
+  display: none;
+}
+
+.plusbtn, .minusbtn {
+  cursor: pointer;
+}
+
+.close-btn:hover {
+  background-color: white;
+}

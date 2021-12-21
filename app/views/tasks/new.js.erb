@@ -1,0 +1,37 @@
+$(".modal").html("<%= escape_javascript(render 'new') %>");
+$(".modal").show();
+
+function minusbtn(){
+  if($(".plustr").css("display") == "none"){
+    $(".plustr").show();
+  }
+  for(var i=9; i>=1; i--){
+    if($(".form-" + i).css("display") != "none"){
+      $(".form-" + i).hide();
+      if(i == 1){
+        $(".minustr").hide();
+      }
+      break;
+    }
+  }
+}
+
+function plusbtn(){
+  if($(".minustr").css("display") == "none"){
+    $(".minustr").show();
+  }
+  for(var i=1; i<=9; i++){
+    if($(".form-" + i).css("display") == "none"){
+      $(".form-" + i).show();
+      if(i == 9){
+        $(".plustr").hide();
+      }
+      break;
+    }
+  }
+  <%# for(var i=1; i<=10; i++){
+    var elem = $(".base").clone();
+    elem.removeClass("base")
+    elem.insertBefore($(".base"));
+  } %>
+}

@@ -10,3 +10,10 @@ ja:
           password_confirmation: パスワード再入力
           created_at: 作成日
           updated_at: 更新日
+        task:
+          title: タイトル
+          memo: 詳細
+          start_time: 開始時間
+          finish_time: 終了時間
+          date: 日付
+          user_id: ユーザーID

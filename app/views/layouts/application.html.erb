@@ -27,6 +27,7 @@
                 <% if logged_in? && @login_user.provider.present? %>
                   <%= link_to "ログアウト", logout_path, method: :delete, class: "nav-link" %>
                 <% elsif logged_in? %>
+                  <%# link_to "退出", user_path(@login_user), method: :delete, data: {confirm: "すべての予定が削除されます。よろしいですか？"}, class: "nav-link" %>
                   <%= link_to "退出", logout_path, method: :delete, data: {confirm: "すべての予定が削除されます。よろしいですか？"}, class: "nav-link" %>
                 <% end %>
               </div>

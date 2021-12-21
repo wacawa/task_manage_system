@@ -1,0 +1,74 @@
+<%# javascript_pack_tag 'sessions/new' %>
+
+<div class="modal-dialog modal-xl">
+  <div class="modal-content">
+    <div class="d-grid gap-2 d-md-flex justify-content-md-end">
+      <%= link_to "", :back, class: "btn-close secondary" %>
+    </div>
+    <h3 class="secondary">スケジュール</h3>
+    <div class="modal-body">
+      <div class="row justify-content-md-center">
+        <div class="col-12 secondary">
+          <%= form_with(model: @form, url: user_tasks_path(@user, day: @day, hour: @hour), method: :post, local: true) do |f| %>
+<%
+=begin 
+%>          
+            <% if @tasks && @tasks.errors.present? %>
+              <ul>
+                <li>タスクの作成に失敗しました。</li>
+              </ul>
+            <% end %>
+<%
+=end
+%>
+            <table class="table table-bordered border-secondary align-middle center-middle">
+              <tbody class="secondary">
+                <tr>
+                  <th><%= Task.human_attribute_name(:start_time) %></th>
+                  <th><%= Task.human_attribute_name(:finish_time) %></th>
+                  <th><%= Task.human_attribute_name(:title) %></th>
+                  <th><%= Task.human_attribute_name(:memo) %></th>
+                </tr>
+                <% i = 1 %>
+                <% j = 0 %>
+                <% form_count = 10 %>
+                <%= f.fields_for :tasks do |t| %>
+                  <% c = j > 0 ? "form-#{j}" : "" %>
+                  <tr class=<%= c %>>
+                    <td>
+                      <% if i == 1 %>
+                        <%= t.time_field :start_time, value: l(DateTime.now, format: :hstime), class: "form-control" %>
+                      <% else %>
+                        <%= t.time_field :start_time, class: "form-control" %>
+                      <% end %>
+                    </td>
+                    <td><%= t.time_field :finish_time, class: "form-control" %></td>
+                    <td><%= t.text_field :title, class: "form-control" %></td>
+                    <td><%= t.text_area :memo, class: "form-control" %></td>
+                  </tr>
+                  <% j += 1 if i % form_count == 0 %>
+                  <% i += 1 %>
+                  <%= t.hidden_field :start_datetime, value: DateTime.now.beginning_of_hour.change(day: @day.to_i, hour: @hour.to_i) %>
+                  <%= t.hidden_field :user_id, value: @user.id %>
+                  <%# t.hidden_field :start_date, value: 1 %>
+                  <%# t.hidden_field :finish_date, value: 1 %>
+                <% end %>
+                <tr class="minustr">
+                  <td colspan="4" onclick="minusbtn()"><div class="minusbtn">ー</div></td>
+                </tr>
+                <tr class="plustr">
+                  <td colspan="4" onclick="plusbtn()"><div class="plusbtn">＋</div></td>
+                </tr>
+              </tbody>
+            </table>
+            <div class="d-grid d-md-flex gap-1 justify-content-md-center">
+            <%# <div class="d-md-flex"> %>
+              <%= f.submit "送信", class: "btn btn-secondary" %>
+              <%= link_to "閉じる", :back, class: "btn btn-outline-secondary bg-white close-btn" %>
+            </div>
+          <% end %>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
