@@ -1,5 +1,5 @@
 :root {
-  --time-div-height: 10px;
+  --time-div-height: 8px;
 }
 
 .time-boxing {
@@ -24,44 +24,70 @@
   margin-left: 10px;
 }
 
-
-.axis {
-  position: absolute;
-  border-right: #6c757d solid 5px;
-  margin-left: 20%;
-  // height: calc(100% - 74px);
-  height: 100%;
-}
-
 .task {
   color: white;
   position: absolute;
   border: #6c757d solid;
   width: 50%;
   // height: calc(100% - 74px);
-  height: auto;
+  // height: auto;
   background-color: #6c757d;
-  opacity: 0.8;
+  opacity: 0.7;
   margin-left: 30%;
   // padding: 30px 50px;
   border: white solid 1px;
-  border-radius: 20px;
-  overflow: auto;
+  border-radius: 50px;
+  padding: 20px 0;
+}
+
+.task-form {
+  padding: 20px;
+  z-index: 100;
+}
+
+.overflow {
+  overflow: scroll;
+}
+
+.sticky {
+  position: sticky;
+  top: 80px;
 }
 
 .task-title {
-  padding-top: 20px;
-  padding-left: 50px;
+  display: inline;
+  // padding-top: 20px;
+  // padding-left: 50px;
+  margin-top: 20px;
+  margin-left: 50px;
+}
+
+.time-range {
+  display: inline;
+  // padding-left: 30px;
+  margin-left: 30px;
 }
 
 .memo {
-  padding-top: 10px;
+  padding: 10px 0;
   padding-left: 40px;
+}
+
+.btn-secondary {
+  opacity: 2;
+}
+
+.axis {
+  position: absolute;
+  border-right: #6c757d solid 5px;
+  margin-left: 18%;
+  // height: calc(100% - 74px);
+  height: 100%;
 }
 
 .time {
   vertical-align: middle;
-  padding: 10%;
+  padding: 6%;
 }
 
 .hour {
@@ -91,8 +117,22 @@
   bottom: 5%;
 }
 
+.mail {
+  position: fixed;
+  left: 5%;
+  bottom: 5%;
+}
+
 .modal {
   margin-top: 1%;
+}
+
+.regist-form {
+  margin: 20px 0;
+}
+
+.registration {
+  padding-top: 10%;
 }
 
 .footer {

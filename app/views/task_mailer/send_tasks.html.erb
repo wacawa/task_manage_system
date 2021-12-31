@@ -1,0 +1,27 @@
+<p><br>
+　<span class="mail-title">TimeBoxing</span>より<br>
+　本日の予定をお届けします。
+</p>
+
+<% if @tasks.present? %>
+  <% @tasks.each do |task| %>
+    <% stime = "#{"%02d" % task.start_time.hour} : #{"%02d" % task.start_time.min}" %>
+    <% ftime = "#{"%02d" % task.finish_time.hour} : #{"%02d" % task.finish_time.min}" %>
+    <% if task.memo.blank? %>
+      　<%= "#{stime} 〜 #{ftime}" %>　<%= task.title %>
+      <br>
+    <% else %>
+      <details>
+        <summary><%= "#{stime} 〜 #{ftime}" %>　<%= task.title %></summary>
+        <% task.memo.split("\r\n").each do |m| %>
+          <div>　　<%= m %></div>
+        <% end %>
+      </details>
+      <br>
+    <% end %>
+  <% end %>
+<% else %>
+  <p>　予定なし</p>
+<% end %> 
+
+<%# link_to "TimeBoxing", user_path(@user) %>

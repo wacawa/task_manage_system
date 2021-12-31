@@ -1,37 +1,44 @@
-$(".modal").html("<%= escape_javascript(render 'new') %>");
-$(".modal").show();
+$(".task-modal").html("<%= escape_javascript(render 'new') %>");
+$(".task-modal").show();
+
+function cnames(){
+  var cnames = [];
+  $("tr[class^='form-']").each(function(){
+    if($.inArray($(this).attr("class"), cnames) == -1){
+      cnames.push($(this).attr("class"));
+    }
+  })
+  return cnames;
+}
 
 function minusbtn(){
   if($(".plustr").css("display") == "none"){
     $(".plustr").show();
   }
-  for(var i=9; i>=1; i--){
-    if($(".form-" + i).css("display") != "none"){
-      $(".form-" + i).hide();
-      if(i == 1){
+  $(cnames().reverse()).each(function(i){
+    cname = "." + this
+    if($(cname).css("display") == "table-row"){
+      $(cname).hide();
+      if(i == cnames().length - 1){
         $(".minustr").hide();
       }
-      break;
+      return false;
     }
-  }
+  })
 }
 
 function plusbtn(){
   if($(".minustr").css("display") == "none"){
     $(".minustr").show();
   }
-  for(var i=1; i<=9; i++){
-    if($(".form-" + i).css("display") == "none"){
-      $(".form-" + i).show();
-      if(i == 9){
+  $(cnames()).each(function(i){
+    cname = "." + this
+    if($(cname).css("display") == "none"){
+      $(cname).show();
+      if(i == cnames().length - 1){
         $(".plustr").hide();
       }
-      break;
+      return false;
     }
-  }
-  <%# for(var i=1; i<=10; i++){
-    var elem = $(".base").clone();
-    elem.removeClass("base")
-    elem.insertBefore($(".base"));
-  } %>
+  })
 }

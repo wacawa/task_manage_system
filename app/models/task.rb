@@ -7,7 +7,7 @@ class Task < ApplicationRecord
   validates :start_datetime, presence: true
 
   validate :finish_time_is_later_than_start_time
-  validate :time_range_cannot_overlap_others
+  validate :time_range_cannot_overlap_others, on: :create
 
   def finish_time_is_later_than_start_time
     errors.add(:finish_time, "：終了時間は開始時間より遅くしてください。") if start_time && finish_time && finish_time <= start_time

@@ -8,14 +8,13 @@ class StaticPagesController < ApplicationController
     user = get_user
     user.email = "gest#{format("%02d", user.id)}@email.com"
     user.password = SecureRandom.urlsafe_base64
-    user.expiration_date = DateTime.now.since(1.5.days)
-    # year = user.expiration_date.year
-    # month = user.expiration_date.month
-    # day = user.expiration_date.day
-    # hour = user.expiration_date.hour
+    user.expiration_date = DateTime.now.beginning_of_hour.since(1.day + 2.hours)
     if user.save
-      redirect_user(user)
+      redirect_user(user, "タスクを作成しましょう♪")
     end
+  end
+
+  def intro
   end
 
 
@@ -23,7 +22,10 @@ class StaticPagesController < ApplicationController
     
     def not_access
       if login_user.present?
-        redirect_back fallback_location: @login_user
+        flash[:_] = "×"
+        # redirect_back fallback_location: @login_user
+        redirect_to create_user_url(login_user)
+        # redirect_to request.referer
       end
     end
 

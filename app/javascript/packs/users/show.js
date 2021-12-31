@@ -142,7 +142,7 @@
 
 window.addEventListener("load", function(){
   // setInterval(clock, 1000);
-  setInterval(now_line, 500);
+  setInterval(now_line, 1100);
 }, false);
 
 var time = function(){
@@ -171,34 +171,39 @@ var elemtop = function(hour, minute, second, day){
 }
 
 function now_line(){
-  const nowtop = elemtop(time()[0], time()[1], time()[2], time()[3]);
-  $(".now-line").css("top", nowtop[0]);
-  $(".now-line").text(nowtop[1]);
-  // if(nowtop){
-  //   $(".now-line").text(time()[0] + ":" + time()[1] + ":" + time()[2].toString().padStart(2, "0"));
-  // }else{
-  //   $(".now-line").text("end");
-  // }
-}
-
-function scroll(){
-  const nowtop = elemtop(time()[0], time()[1], time()[2], time()[3]);
-  $(".now-line").css("top", nowtop[0]);
-  if(nowtop[1] != "end"){
-    $(window).scrollTop(nowtop[0] - 200);
-  }else{
-    $(window).scrollTop(nowtop[0]);
+  if($(".now-line").length){
+    const nowtop = elemtop(time()[0], time()[1], time()[2], time()[3]);
+    $(".now-line").css("top", nowtop[0]);
+    $(".now-line").text(nowtop[1]);
+    // if(nowtop){
+    //   $(".now-line").text(time()[0] + ":" + time()[1] + ":" + time()[2].toString().padStart(2, "0"));
+    // }else{
+    //   $(".now-line").text("end");
+    // }
   }
 }
 
-$(function(){
-  draw();
-  scroll();
-  // console.log()
-  set_task();
-})
+function scroll(){
+  if($(".task-form").css("display") == "block"){
+    var top = $(".task-form").offset().top - $(window).height() / 4;
+    $(window).scrollTop(top);
+  }else{
+    if($(".now-line").length){
+      const nowtop = elemtop(time()[0], time()[1], time()[2], time()[3]);
+      $(".now-line").css("top", nowtop[0]);
+      if(nowtop[1] != "end"){
+        $(window).scrollTop(nowtop[0] - 200);
+      }else{
+        $(window).scrollTop(nowtop[0]);
+      }
+    }else{
+      $(window).scrollTop(0);
+    }
+  }
+}
 
 function set_task(){
+  var i = 0;
   $(".task").each(function(){
     var navbar = $(".navbar").height();
     var cname_array = $(this).attr("class").split(" ");
@@ -206,11 +211,20 @@ function set_task(){
     var range = cname_array[2].substr(6)
     var div_height = $(":root").css("--time-div-height").slice(0, -2)
     range = range * div_height// - div_height / 2;
-    var top = Math.floor($("."+cname).offset().top) - navbar - div_height// * 3 / 4;
+    var top = Math.floor($("."+cname).offset().top) - navbar - div_height * 1.4;
     $(this).css("top", top);
     $(this).css("height", range);
+    $(this).css("z-index", i);
+    i += 1
   })
 }
+
+$(function(){
+  set_task();
+  draw();
+  scroll();
+})
+
 
 function draw() {
   var canvas = document.getElementById('plus');
@@ -236,8 +250,6 @@ function draw() {
     ctx.fill();
   }
 }
-
-
 
 
 

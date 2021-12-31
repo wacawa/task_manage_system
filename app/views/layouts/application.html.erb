@@ -20,23 +20,31 @@
         <%# <div class="col-md-12"> %>
           <div class="header">
             <nav class="navbar fixed-top bg-secondary">
-            <%# <nav class="navbar bg-secondary"> %>
               <div class="container-md">
                 <%= link_to "TimeBoxing",  "#", id: "logo", class: "navbar-brand" %>
                 <%# link_to image_tag("user-icon.png", size: "35x35"), "#login_path", class: "btn rounded-circle p-2" %>
-                <% if logged_in? && @login_user.provider.present? %>
-                  <%= link_to "ログアウト", logout_path, method: :delete, class: "nav-link" %>
-                <% elsif logged_in? %>
-                  <%# link_to "退出", user_path(@login_user), method: :delete, data: {confirm: "すべての予定が削除されます。よろしいですか？"}, class: "nav-link" %>
-                  <%= link_to "退出", logout_path, method: :delete, data: {confirm: "すべての予定が削除されます。よろしいですか？"}, class: "nav-link" %>
+
+                <% flash.each do |_, msg| %>
+                  <div class="fs-6 text-white">
+                    <%= _.html_safe %>:
+                    <%= msg.html_safe %>
+                    <%# session[:flash] ? session[:flash]["flashes"]["_"] : "" %>
+                  </div>
                 <% end %>
+
+                <div class="flex">
+                  <% if logged_in? && @login_user.provider.present? %>
+                    <%= link_to "アカウント設定", edit_user_path(@login_user), remote: true, class: "nav-link" %>
+                    <%= link_to "ログアウト", logout_path, method: :delete, class: "nav-link" %>
+                  <% elsif logged_in? %>
+                    <%= link_to "アカウント登録", edit_user_path(@login_user), remote: true, class: "nav-link" %>
+                    <%= link_to "退出", logout_path, method: :delete, data: {confirm: "すべての予定が削除されます。よろしいですか？"}, class: "nav-link" %>
+                  <% end %>
+                </div>
               </div>
             </nav>
           </div>
           <div class="main">
-            <% flash.each do |message_type, msg| %>
-              <div class="alert alert-<%= message_type %>"><%= msg.html_safe %></div>
-            <% end %>
             <%= yield %>
           </div>
         <%# </div> %>

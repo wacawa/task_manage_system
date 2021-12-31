@@ -1,0 +1,29 @@
+<div class="modal-dialog modal-lg registration-modal">
+  <div class="modal-content">
+    <div class="d-grid gap-2 d-md-flex justify-content-md-end">
+      <%= link_to "", :back, class: "btn-close secondary" %>
+    </div>
+    <% title = @user.provider.nil? ? "登録" : "修正" %>
+    <h3 class="secondary">アカウント<%= title %></h3>
+    <div class="modal-body">
+      <%= form_with(model: @user, method: :patch, local: true) do |f| %>
+        <div class="row justify-content-md-center">
+          <div class="col-8 secondary regist-form">
+            <%= f.label :email, class: "label" %>
+            <%= f.email_field :email, class: "col-3 form-control text-secondary" %>
+            <%= f.label :password, class: "label" %>
+            <%= f.password_field :password, class: "form-control text-secondary" %>
+            <%= f.label :password_confirmation, class: "label" %>
+            <%= f.password_field :password_confirmation, class: "form-control text-secondary" %>
+            <%= f.hidden_field :expiration_date, value: nil, class: "form-control text-secondary" %>
+            <%= f.hidden_field :provider, value: "email", class: "form-control text-secondary" %>
+          </div>
+          <div class="d-grid d-md-flex gap-3 justify-content-md-center">
+            <%= f.submit "送信", class: "btn btn-outline-secondary" %>
+            <%= link_to "閉じる", :back, class: "btn btn-outline-secondary" %>
+          </div>
+        </div>
+      <% end %>
+    </div>
+  </div>
+</div>

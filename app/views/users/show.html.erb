@@ -1,22 +1,56 @@
 <%= javascript_pack_tag 'users/show' %>
 
 <div class="time-boxing secondary">
-  <div class="now-line"></div>
+
+  <% if @within %>
+    <div class="now-line"></div>
+  <% end %>
   <%# <div class="task secondary"></div> %>
 
   <% @tasks.each do |task| %>
     <% st = task.start_time %>
+    <% ft = task.finish_time %>
     <% range = ((task.finish_time - task.start_time) / 60).to_i %>
+    <% overflow = range >= 40 ? "" : "overflow" %>
+    <% sticky = overflow.blank? ? "sticky" : "" %>
     <% day = "%02d" % st.day %>
     <% hour = "%02d" % st.hour %>
     <% min = "%02d" % st.min %>
     <% cname1 = "task_dhm_#{day+hour+min}" %>
     <% cname2 = "range_#{range}" %>
-    <% link_to task_edit_path do %>
-      <div class="task <%= cname1 %> <%= cname2 %>">
-        <h4 class="task-title"><%= task.title %></h4>
-        <div class="memo"><%= task.memo.nil? ? task.memo : safe_join(task.memo.split("\n"),tag(:br)) %></div>
+    <% fhour = "%02d" % ft.hour %>
+    <% fmin = "%02d" % ft.min %>
+    <% if @edit_task.present? && task.id == @edit_task.id %>
+      <div class="task <%= cname1 %> <%= cname2 %> task-form overflow">
+        <%= form_with(model: task, url: user_task_path(@user, task), local: true) do |f| %>
+            <%= f.text_field :title, class: "form-control text-secondary" %>
+          <div class="row g-2 align-items-center">
+            <div class="col-auto">
+              <%= f.time_field :start_time, class: "form-control text-secondary" %>
+            </div>
+            <div class="col-auto">
+            〜
+            </div>
+            <div class="col-auto">
+              <%= f.time_field :finish_time, class: "form-control  text-secondary" %>
+            </div>
+          </div>
+            <%= f.text_area :memo, rows: "5", class: "form-control text-secondary" %>
+            <%= f.hidden_field :start_datetime %>
+            <%= f.submit "送信", class: "btn btn-light btn-outline-secondary" %>
+            <%= link_to "キャンセル", session[:default_url], class: "btn btn-light btn-outline-secondary" %>
+        <% end %>
       </div>
+    <% else %>
+      <%= link_to user_path(year: params[:year], month: params[:month], day: params[:day], hour: params[:hour], task_id: task.id) do %>
+        <div class="task <%= cname1 %> <%= cname2 %> <%= overflow %>">
+          <div class="<%= sticky %>">
+            <h4 class="task-title"><%= task.title %></h4>
+            <div class="time-range"><%= " #{hour} : #{min} 〜 #{fhour} : #{fmin} " %></div>
+            <div class="memo"><%= task.memo.nil? ? task.memo : safe_join(task.memo.split("\n"),tag(:br)) %></div>
+          </div>
+        </div>
+      <% end %>
     <% end %>
   <% end %>
 
@@ -44,14 +78,22 @@
       </div>
     </div>
   </div>
-  <div class="addtask">
-    <%= link_to new_user_task_path(@user, day: @day[0], hour: @hour), remote: true do %> 
-      <canvas id="plus" width="100" height="100"></canvas>
-    <% end %>
-  </div>
+  <% if @within %>
+    <div class="addtask">
+      <%= link_to new_user_task_path(@user, day: @day[0], hour: @hour), remote: true do %> 
+        <canvas id="plus" width="100" height="100"></canvas>
+      <% end %>
+    </div>
+    <div class="mail">
+      <% time_hash = {year: @time.year, month: @time.month, day: @time.day, hour: @time.hour} %>
+      <%= link_to send_mail_user_path(@user, time_hash), method: :post do %>
+        <%= image_tag("mail.png") %>
+      <% end %>
+    </div>
+  <% end %>
 </div>
-
-<div class="modal"></div>
+<div class="modal task-modal"></div>
+<div class="modal registration"></div>
 
 
 <%

@@ -8,10 +8,13 @@ Rails.application.routes.draw do
   post '/email_login', to: 'sessions#create_email'
   delete '/logout', to: 'sessions#destroy'
 
+  get "/intro", to: "static_pages#intro"
+
   resources :users do
     member do
+      post "/send_mail", to: "users#send_mail"
     end
-    resources :tasks, only: [:new, :create]
+    resources :tasks, only: [:new, :create, :update]
   end
 
 end

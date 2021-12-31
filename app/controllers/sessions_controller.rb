@@ -9,9 +9,10 @@ class SessionsController < ApplicationController
     user.id = User.last.id + 1
     user.password = password
     if user.save
-      redirect_user(user)
+      redirect_user(user, "おかえりなさいませ♪")
     else
-      render :new
+      flash.now[:_] = "もう一度お願いします。"
+      render "users/show"
     end
   end
 
@@ -20,14 +21,18 @@ class SessionsController < ApplicationController
     user = User.find_by(email: email)
     if user && user.authenticate(params[:session][:password])
       # params[:session][:remember_me] == "1" ? remember(user) : forget(user)
-      redirect_user(user)
+      redirect_user(user, "おかえりなさいませ♪")
     else
+      flash[:_] = "もう一度お願いします。"
       redirect_to root_url(email: email)
     end
   end
 
   def destroy
+    user = User.find(params[:id])
     logout if logged_in?
+    # flash[:_] = user.provider.nil? ? "退出しました。" : "ログアウトしました。"
+    flash[:_] = "ログアウトしました。"
     redirect_to root_url
   end
 

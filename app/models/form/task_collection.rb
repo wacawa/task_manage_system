@@ -41,7 +41,6 @@ class Form::TaskCollection < Form::Base
                 t.start_time = t.start_datetime
                 t.finish_time = t.start_time + range
                 range = start_datetime - val.start_time
-                debugger
               end
               val.start_time = ds_boolean ? val.start_time.tomorrow : val.start_time
               val.finish_time = val.start_time + range

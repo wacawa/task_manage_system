@@ -9,18 +9,7 @@
     <div class="modal-body">
       <div class="row justify-content-md-center">
         <div class="col-12 secondary">
-          <%= form_with(model: @form, url: user_tasks_path(@user, day: @day, hour: @hour), method: :post, local: true) do |f| %>
-<%
-=begin 
-%>          
-            <% if @tasks && @tasks.errors.present? %>
-              <ul>
-                <li>タスクの作成に失敗しました。</li>
-              </ul>
-            <% end %>
-<%
-=end
-%>
+          <%= form_with(model: @form, url: user_tasks_path(@user), method: :post, local: true) do |f| %>
             <table class="table table-bordered border-secondary align-middle center-middle">
               <tbody class="secondary">
                 <tr>
@@ -31,7 +20,7 @@
                 </tr>
                 <% i = 1 %>
                 <% j = 0 %>
-                <% form_count = 10 %>
+                <% form_count = 5 %>
                 <%= f.fields_for :tasks do |t| %>
                   <% c = j > 0 ? "form-#{j}" : "" %>
                   <tr class=<%= c %>>
@@ -61,10 +50,10 @@
                 </tr>
               </tbody>
             </table>
-            <div class="d-grid d-md-flex gap-1 justify-content-md-center">
+            <div class="d-grid d-md-flex gap-2 justify-content-md-center">
             <%# <div class="d-md-flex"> %>
-              <%= f.submit "送信", class: "btn btn-secondary" %>
-              <%= link_to "閉じる", :back, class: "btn btn-outline-secondary bg-white close-btn" %>
+              <%= f.submit "送信", class: "btn btn-outline-secondary" %>
+              <%= link_to "閉じる", :back, class: "btn btn-outline-secondary" %>
             </div>
           <% end %>
         </div>

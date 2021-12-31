@@ -43,6 +43,7 @@ module SessionsHelper
   def logout
     forget(login_user)
     session.delete(:user_id)
+    session.delete(:default_time) if login_user && login_user.provider.nil?
     @login_user = nil
   end
 
