@@ -1,53 +1,117 @@
 <div class="modal-dialog modal-xl intro-modal">
   <div class="modal-content">
     <div class="d-grid gap-2 d-md-flex justify-content-md-end">
-      <%= link_to "", :back, class: "btn-close secondary" %>
+      <%# link_to "", :back, class: "btn-close secondary" %>
+      <div class="btn-close secondary back-btn"></div>
     </div>
-    <h3 class="secondary">操作説明</h3>
     <div class="modal-body">
-
-<div id="carouselExampleDark" class="carousel carousel-dark slide" data-bs-ride="carousel">
-  <div class="carousel-indicators">
-    <button type="button" data-bs-target="#carouselExampleDark" data-bs-slide-to="0" class="active" aria-current="true" aria-label="Slide 1"></button>
-    <button type="button" data-bs-target="#carouselExampleDark" data-bs-slide-to="1" aria-label="Slide 2"></button>
-    <button type="button" data-bs-target="#carouselExampleDark" data-bs-slide-to="2" aria-label="Slide 3"></button>
-  </div>
-  <div class="carousel-inner">
-    <div class="carousel-item active" data-bs-interval="10000">
-      <%= image_tag("intro-1.png", class: "image mx-auto d-block") %>
-      <div class="carousel-caption d-none d-md-block">
-        <h5>First slide label</h5>
-        <p>Some representative placeholder content for the first slide.</p>
-      </div>
-    </div>
-    <div class="carousel-item" data-bs-interval="2000">
-      <%= image_tag("intro-2.png", class: "image mx-auto d-block") %>
-      <div class="carousel-caption d-none d-md-block">
-        <h5>Second slide label</h5>
-        <p>Some representative placeholder content for the second slide.</p>
-      </div>
-    </div>
-    <div class="carousel-item">
-      <%= image_tag("intro-2.png", class: "image mx-auto d-block") %>
-      <div class="carousel-caption d-none d-md-block">
-        <h5>Third slide label</h5>
-        <p>Some representative placeholder content for the third slide.</p>
-      </div>
-    </div>
-  </div>
-  <button class="carousel-control-prev" type="button" data-bs-target="#carouselExampleDark" data-bs-slide="prev">
-    <span class="carousel-control-prev-icon" aria-hidden="true"></span>
-    <span class="visually-hidden">Previous</span>
-  </button>
-  <button class="carousel-control-next" type="button" data-bs-target="#carouselExampleDark" data-bs-slide="next">
-    <span class="carousel-control-next-icon" aria-hidden="true"></span>
-    <span class="visually-hidden">Next</span>
-  </button>
-</div>
-
-        <div class="d-grid justify-content-md-center">
-          <%= link_to "閉じる", :back, class: "btn btn-outline-secondary" %>
+      <div id="carouselExampleDark" class="carousel carousel-dark slide" data-bs-ride="carousel" data-bs-interval="false">
+        <div class="carousel-indicators">
+          <button type="button" data-bs-target="#carouselExampleDark" data-bs-slide-to="0" class="active" aria-current="true" aria-label="Slide 1"></button>
+          <button type="button" data-bs-target="#carouselExampleDark" data-bs-slide-to="1" aria-label="Slide 2"></button>
+          <button type="button" data-bs-target="#carouselExampleDark" data-bs-slide-to="2" aria-label="Slide 3"></button>
+          <button type="button" data-bs-target="#carouselExampleDark" data-bs-slide-to="3" aria-label="Slide 4"></button>
+          <button type="button" data-bs-target="#carouselExampleDark" data-bs-slide-to="4" aria-label="Slide 5"></button>
+          <button type="button" data-bs-target="#carouselExampleDark" data-bs-slide-to="5" aria-label="Slide 6"></button>
+          <button type="button" data-bs-target="#carouselExampleDark" data-bs-slide-to="6" aria-label="Slide 7"></button>
+          <button type="button" data-bs-target="#carouselExampleDark" data-bs-slide-to="7" aria-label="Slide 8"></button>
+          <button type="button" data-bs-target="#carouselExampleDark" data-bs-slide-to="8" aria-label="Slide 9"></button>
         </div>
+        <div class="carousel-inner">
+          <div class="carousel-item active">
+            <%= image_tag("intro-0", class: "image mx-auto d-block") %>
+            <div class="carousel-caption d-none d-md-block">
+              <h3 class="secondary">TimeBoxing 〜タイムボクシング〜</h3>
+              <p><br>
+                タイムボクシングは、生産性の向上を目的とした時間管理手法のひとつです。<br><br>
+                会議などの重要な予定から、<br>娯楽などの普段はカレンダーに書かないような些細な予定まで<br>
+                1日のスケジュールを"余白ができないように"タスクで埋めていきます。<br><br>
+                予定を立てたら、あとはタスクをこなしていきます。<br><br>
+                時間通りに進まなくても、まったく問題ありません。<br><br>
+                臨機応変に、タスクを入れ替えたり、短くしたり、適宜調整しましょう。<br><br>
+              </p>
+            </div>
+          </div>
+          <div class="carousel-item">
+            <%= image_tag("intro-1.png", class: "image mx-auto d-block") %>
+            <div class="carousel-caption d-none d-md-block">
+              <h5>ログイン</h5>
+              <p>
+                「ゲスト」では、一時的な(ゲスト)アカウントを自動作成し<br>24時間後までのタスクを作成できます。<br>
+                アカウントをお持ちなら、「ログイン」をクリックしてください。
+              </p>
+            </div>
+          </div>
+          <div class="carousel-item">
+            <%= image_tag("intro-2.png", class: "image mx-auto d-block") %>
+            <div class="carousel-caption d-none d-md-block">
+              <h5>アカウントログイン</h5>
+              <p>
+                メールアドレスまたは「LINE」もしくは「Google」のアカウントで<br>ログインできます。
+              </p>
+            </div>
+          </div>
+          <div class="carousel-item">
+            <%= image_tag("intro-3.png", class: "image mx-auto d-block") %>
+            <div class="carousel-caption d-none d-md-block">
+              <h5>タスクの追加</h5>
+              <p>「＋」マークをクリック。</p>
+            </div>
+          </div>
+          <div class="carousel-item">
+            <%= image_tag("intro-4.png", class: "image mx-auto d-block") %>
+            <div class="carousel-caption d-none d-md-block">
+              <h5>タスクの作成</h5>
+              <p>必須項目：「開始時間」「終了時間」「タイトル」。<br>記入欄の追加は「＋欄」をクリック。<br><br><br></p>
+            </div>
+          </div>
+          <div class="carousel-item">
+            <%= image_tag("intro-5.png", class: "image mx-auto d-block") %>
+            <div class="carousel-caption d-none d-md-block">
+              <h5>タスク例と送信</h5>
+              <p>記入が完了したら「送信」をクリック。<br>（タスク作成は何度でも行えます。）</p>
+            </div>
+          </div>          
+          <div class="carousel-item">
+            <%= image_tag("intro-6.png", class: "image mx-auto d-block") %>
+            <div class="carousel-caption d-none d-md-block">
+              <h5>タスクの修正</h5>
+              <p>「タスク枠内」クリックで、修正が可能になります。</p>
+            </div>
+          </div>          
+          <div class="carousel-item">
+            <%= image_tag("intro-7.png", class: "image mx-auto d-block") %>
+            <div class="carousel-caption d-none d-md-block">
+              <h5>退出・ログアウト</h5>
+              <p>
+                「退出」すると、作成したすべてのタスクが削除されます。<br>
+                「アカウント登録」すると「ログアウト」に変わります。<br>
+                「ログアウト」しても、アカウントとタスクは削除されません。
+              </p>
+            </div>
+          </div>          
+          <div class="carousel-item">
+            <%= image_tag("intro-8.png", class: "image mx-auto d-block") %>
+            <div class="carousel-caption d-none d-md-block">
+              <h5>メール送信</h5>
+              <p>アカウント登録すると、「メールマーク」が表示されます。<br>タスクを自分宛に送信できます。</p>
+            </div>
+          </div>          
+        </div>
+        <button class="carousel-button carousel-control-prev" type="button" data-bs-target="#carouselExampleDark" data-bs-slide="prev">
+          <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+          <span class="visually-hidden">Previous</span>
+        </button>
+        <button class="carousel-button carousel-control-next" type="button" data-bs-target="#carouselExampleDark" data-bs-slide="next">
+          <span class="carousel-control-next-icon" aria-hidden="true"></span>
+          <span class="visually-hidden">Next</span>
+        </button>
+      </div>
+
+      <div class="d-grid justify-content-md-center">
+        <%# link_to "閉じる", :back, class: "btn btn-outline-secondary" %>
+        <div class="btn btn-outline-secondary back-btn">閉じる</div>
+      </div>
     </div>
   </div>
 </div>

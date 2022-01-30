@@ -39,6 +39,7 @@ class StaticPagesController < ApplicationController
         id = user.id
         user.destroy
       end
+      id = 1 if User.find(1).nil?
       id ||= User.last.id + 1
       return User.new(id: id)
     end

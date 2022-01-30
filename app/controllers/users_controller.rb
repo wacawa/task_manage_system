@@ -2,17 +2,22 @@ class UsersController < ApplicationController
   before_action :set_user, except: [:logged_in_user]
   before_action :logged_in_user, only: :show
   before_action :correct_user, only: :show
-  before_action :session_delete, only: :show
-  before_action :create_time, only: :show
-  before_action :edit_session_and_param, only: :show
+  before_action :create_tasks, only: :show
 
   def show
+    @tasks ||= []
     @within = @time <= Time.now && Time.now < @time.tomorrow
-    @tasks = @task.present? ? @user.tasks.where(start_datetime: @task.start_datetime).order(:start_time) : []
+    @year = @time.year
+    @month = @time.month
     @day = [@time.day, @time.tomorrow.day]
     @hour = @time.hour
     @end_hour = @hour + 24
     @edit_task = @user.tasks.find(params[:task_id]) if params[:task_id]
+    @prev = @user.tasks.order(:start_datetime).where("start_datetime < ?", @time).last
+    @next = @user.tasks.order(:start_datetime).where("start_datetime > ?", @time).first
+    @next_time = @next.start_datetime if @next.present?
+    time = (session[:default_time].map{|_,v|v}.join("-") + ":00:00").to_time
+    @next_time ||= time if time.is_a?(Time) && @time < time
   end
 
   def destroy
@@ -41,7 +46,7 @@ class UsersController < ApplicationController
     # time = "#{params[:year]}-#{params[:month]}-#{params[:day]} #{params[:hour]}:00:00".to_time
     time = "#{t[0]}-#{t[1]}-#{t[2]} #{t[3]}:00:00".to_time
     tasks = @user.tasks.where("start_datetime LIKE ?", time)
-    @tasks = tasks.where("finish_time > ?", Time.now)
+    @tasks = tasks.where("finish_time > ?", Time.now).order(:start_time)
     TaskMailer.send_tasks(@user, @tasks).deliver_now
     flash[:mail] = "送信しました。"
     redirect_to create_user_url(@user)
@@ -71,53 +76,49 @@ class UsersController < ApplicationController
       end
     end
 
-    def session_delete
+    def create_tasks
       if @user.provider.blank?
         user_ex_date(@user)
         if @boolean && @ex_date < DateTime.now
           logout
-          flash[:outsession] = "明日の計画を立てましょう♪"
+          flash[:outsession] = "お疲れ様でした♪"
           redirect_to root_url
         elsif !@boolean
           password = SecureRandom.urlsafe_base64
-          @user.update(expiration_date: DateTime.now.since(1.day, 2.hours), password: password, password_confirmation: password)
+          @time = Time.now.beginning_of_hour.tomorrow
+          @user.update(expiration_date: @time, password: password, password_confirmation: password)
+          @time = @time.yesterday
+        else
+          hash = session[:default_time].empty? ? {} : session[:default_time]
+          time = hash.empty? ? false : "#{hash["year"]}-#{hash["month"]}-#{hash["day"]} #{hash["hour"]}:00:00".to_time
+          @time = "#{params[:year]}-#{params[:month]}-#{params[:day]} #{params[:hour]}:00:00".to_time
+          @time ||= time
+          @tasks = @user.tasks.where(start_datetime: @time).order(:start_time)
         end
-      end
-    end
-
-    def create_time
-      if params[:year] && params[:month] && params[:day] && params[:hour]
-        @time = "#{params[:year]}-#{params[:month]}-#{params[:day]} #{params[:hour]}:00:00".to_time
-        @task = @user.tasks.where("start_datetime >= ?", @time).where("start_datetime < ?", @time.tomorrow).order(:start_datetime).first
       else
-        @time = Time.now
-        t = @time
-        @task = @user.tasks.where("start_datetime > ?", @time.yesterday).where("start_datetime <= ?", @time).order(:start_datetime).last
-        params[:year] = t.year
-        params[:month] = t.month
-        params[:day] = t.day
-        params[:hour] = t.hour
-        # redirect_to user_url(@user)
-        # flash[:_] = "エラーが発生しました。"
-        # redirect_to create_user_url(@user)
-        # @time = Time.now.beginning_of_hour
-        # @task = @user.tasks.where("start_datetime >= ?", @time.yesterday).where("start_datetime < ?", @time).order(:start_datetime).last
-        # @time = @task.start_datetime if @task.present?
-      end
-      @time = @task.start_datetime if @task.present?
-      session[:default_time] = {year: @time.year, month: @time.month, day: @time.day, hour: @time.hour} if session[:default_time].empty?
-      @without_task = true if @task.blank?
-    end
-
-    def edit_session_and_param
-      if @user.provider.present?
-        if @time.tomorrow <= Time.now && Time.now < @time.since(2.days)
-          datetime = @time.tomorrow
-          session[:default_time] = {year: datetime.year, month: datetime.month, day: datetime.day, hour: datetime.hour}
-          redirect_to create_user_url(@user)
-        # elsif params[:day].to_i + 1 == DateTime.now.day && params[:hour].to_i <= DateTime.now.hour
-          # params[:hour] = "#{DateTime.now.hour}"
+        if params[:year] && params[:month] && params[:day] && params[:hour]
+          @time = "#{params[:year]}-#{params[:month]}-#{params[:day]} #{params[:hour]}:00:00".to_time
+          s_datetime = @user.tasks.where("start_datetime > ?", @time).any?
+          hash = session[:default_time].empty? ? {} : session[:default_time]
+          time = hash.empty? ? false : "#{hash["year"]}-#{hash["month"]}-#{hash["day"]} #{hash["hour"]}:00:00".to_time
+          if !s_datetime && time && time.tomorrow <= Time.now
+            datetime = @time.tomorrow
+            session[:default_time] = {year: datetime.year, month: datetime.month, day: datetime.day, hour: datetime.hour}
+            redirect_to create_user_url(@user)
+          end
+        else
+          @time = Time.now.beginning_of_hour
+          @task = @user.tasks.where("start_datetime > ?", @time.yesterday).where("start_datetime <= ?", @time).order(:start_datetime).last
+          # t = @time
+          # params[:year] = t.year
+          # params[:month] = t.month
+          # params[:day] = t.day
+          # params[:hour] = t.hour
+          @time = @task.start_datetime if @task.present?
+          session[:default_time] = {year: @time.year, month: @time.month, day: @time.day, hour: @time.hour} if session[:default_time].empty?
         end
+        @tasks = @user.tasks.where(start_datetime: @time).order(:start_time)
+        # @without_task = true if @task.blank?
       end
     end
 

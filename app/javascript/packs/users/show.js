@@ -143,6 +143,7 @@
 window.addEventListener("load", function(){
   // setInterval(clock, 1000);
   setInterval(now_line, 1100);
+  setInterval(today, 60000);
 }, false);
 
 var time = function(){
@@ -205,30 +206,42 @@ function scroll(){
 function set_task(){
   var i = 0;
   $(".task").each(function(){
-    var navbar = $(".navbar").height();
-    var cname_array = $(this).attr("class").split(" ");
-    var cname = cname_array[1].substr(5)
-    var range = cname_array[2].substr(6)
-    var div_height = $(":root").css("--time-div-height").slice(0, -2)
-    range = range * div_height// - div_height / 2;
-    var top = Math.floor($("."+cname).offset().top) - navbar - div_height * 1.4;
-    $(this).css("top", top);
-    $(this).css("height", range);
-    $(this).css("z-index", i);
-    i += 1
+      var navbar = $(".navbar").height();
+      var cname_array = $(this).attr("class").split(" ");
+      var cname = cname_array[1].substr(5)
+      var range = cname_array[2].substr(6)
+      var div_height = $(":root").css("--time-div-height").slice(0, -2)
+      if(range <= 15){
+        var changedivheight = div_height * 15
+        range = changedivheight + (range - 1) * div_height
+        boolean = cname.endsWith("00");
+        if(boolean){
+          var changediv = $("."+cname).next().attr("class").split(" ")[0];
+          $("."+changediv).css("height", changedivheight)
+        }else{
+          $("."+cname).css("height", changedivheight)
+        }
+      }else{
+        range = range * div_height// - div_height / 2;
+      }
+      var top = Math.floor($("."+cname).offset().top) - navbar - div_height * 1.4;
+      $(this).css("top", top);
+      $(this).css("height", range);
+      $(this).css("z-index", i);
+      i += 1
   })
 }
 
 $(function(){
-  set_task();
+  today();
   draw();
+  set_task();
   scroll();
 })
 
-
 function draw() {
   var canvas = document.getElementById('plus');
-  if (canvas.getContext) {
+  if (canvas && canvas.getContext) {
     var ctx = canvas.getContext('2d');
 
     var x = canvas.height;
@@ -251,5 +264,46 @@ function draw() {
   }
 }
 
+function today() {
+  var canvas = document.getElementById('today');
+  var time = $(".today-view").attr("class").split(" ")[1].split("-")
+  if (canvas.getContext) {
+    var ctx = canvas.getContext('2d');
+
+    var x = canvas.height;
+    var y = canvas.width;
+
+    ctx.beginPath();
+    ctx.strokeStyle = "#6c757d";
+    ctx.lineWidth = 3;
+    roundedRect(ctx, 5, 15, 110, 70, 30);
+    ctx.closePath();
+    date = time[0] + "/" + time[1] + "/" + time[2]
+    ctx.lineWidth = 1;
+    ctx.font = "15px sans-serif";
+    ctx.textAlign = "center";
+    ctx.textBaseline = "middle";
+    ctx.strokeText(date, 60, 50)
+    // ctx.stroke();
+
+    // ctx.fillStyle = "#6c757d"
+    // ctx.fill();
+    // ctx.beginPath();
+  }
+}
+
+function roundedRect(ctx, x, y, width, height, radius) { //角丸四角の描画
+  ctx.beginPath();
+  ctx.moveTo(x, y + radius);
+  ctx.lineTo(x, y + height - radius);
+  ctx.arcTo(x, y + height, x + radius, y + height, radius);
+  ctx.lineTo(x + width - radius, y + height);
+  ctx.arcTo(x + width, y + height, x + width, y + height - radius, radius);
+  ctx.lineTo(x + width, y + radius);
+  ctx.arcTo(x + width, y, x + width - radius, y, radius);
+  ctx.lineTo(x + radius, y);
+  ctx.arcTo(x, y, x, y + radius, radius);
+  ctx.stroke();
+}
 
 

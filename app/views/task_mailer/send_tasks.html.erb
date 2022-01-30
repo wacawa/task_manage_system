@@ -4,9 +4,19 @@
 </p>
 
 <% if @tasks.present? %>
+  <% dates = [] %>
   <% @tasks.each do |task| %>
+    <% date = "#{task.start_time.month} / #{task.start_time.day}" %>
     <% stime = "#{"%02d" % task.start_time.hour} : #{"%02d" % task.start_time.min}" %>
     <% ftime = "#{"%02d" % task.finish_time.hour} : #{"%02d" % task.finish_time.min}" %>
+
+    <% if !dates.include?(date) %>
+      <% if dates.count != 0 %> <br> <% end %>
+      <%= date %>
+      <br>
+      <% dates << date %>
+    <% end %>
+
     <% if task.memo.blank? %>
       　<%= "#{stime} 〜 #{ftime}" %>　<%= task.title %>
       <br>

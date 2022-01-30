@@ -1,9 +1,16 @@
     TimeBoxing  より
-  本日の予定をお届けします。
+  本日の予定をお届けしますよ。
+<% dates = [] %>
 <% @tasks.each do |task| %>
+  <% date = "#{task.start_time.month} / #{task.start_time.day}" %>
   <% stime = "#{"%02d" % task.start_time.hour} : #{"%02d" % task.start_time.min}" %>
   <% ftime = "#{"%02d" % task.finish_time.hour} : #{"%02d" % task.finish_time.min}" %>
-
+  
+  <% if !dates.include?(date) %>
+    <%= date %>
+    <% dates << date %>
+  <% end %>
+  
   <%= "#{stime} 〜 #{ftime}" %>   <%=  task.title %>
               <%# task.memo.nil? ? task.memo : safe_join(task.memo.split("\n"),tag(:br)) %>
     <% task.memo.split("\r\n").each do |m| %>

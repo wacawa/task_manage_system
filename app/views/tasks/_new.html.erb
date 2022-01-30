@@ -3,7 +3,8 @@
 <div class="modal-dialog modal-xl">
   <div class="modal-content">
     <div class="d-grid gap-2 d-md-flex justify-content-md-end">
-      <%= link_to "", :back, class: "btn-close secondary" %>
+      <%# link_to "", :back, class: "btn-close secondary" %>
+      <div class="btn-close secondary back-btn"></div>
     </div>
     <h3 class="secondary">スケジュール</h3>
     <div class="modal-body">
@@ -37,7 +38,7 @@
                   </tr>
                   <% j += 1 if i % form_count == 0 %>
                   <% i += 1 %>
-                  <%= t.hidden_field :start_datetime, value: DateTime.now.beginning_of_hour.change(day: @day.to_i, hour: @hour.to_i) %>
+                  <%= t.hidden_field :start_datetime, value: Time.now.beginning_of_hour.change(day: @day.to_i, hour: @hour.to_i) %>
                   <%= t.hidden_field :user_id, value: @user.id %>
                   <%# t.hidden_field :start_date, value: 1 %>
                   <%# t.hidden_field :finish_date, value: 1 %>
@@ -53,7 +54,8 @@
             <div class="d-grid d-md-flex gap-2 justify-content-md-center">
             <%# <div class="d-md-flex"> %>
               <%= f.submit "送信", class: "btn btn-outline-secondary" %>
-              <%= link_to "閉じる", :back, class: "btn btn-outline-secondary" %>
+              <%# link_to "閉じる", :back, class: "btn btn-outline-secondary" %>
+              <div class="btn btn-outline-secondary back-btn">閉じる</div>
             </div>
           <% end %>
         </div>

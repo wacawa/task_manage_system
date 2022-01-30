@@ -1,7 +1,8 @@
 <div class="modal-dialog modal-lg registration-modal">
   <div class="modal-content">
     <div class="d-grid gap-2 d-md-flex justify-content-md-end">
-      <%= link_to "", :back, class: "btn-close secondary" %>
+      <%# link_to "", :back, class: "btn-close secondary back-btn" %>
+      <div class="btn-close secondary back-btn"></div>
     </div>
     <% title = @user.provider.nil? ? "登録" : "修正" %>
     <h3 class="secondary">アカウント<%= title %></h3>
@@ -20,8 +21,28 @@
           </div>
           <div class="d-grid d-md-flex gap-3 justify-content-md-center">
             <%= f.submit "送信", class: "btn btn-outline-secondary" %>
-            <%= link_to "閉じる", :back, class: "btn btn-outline-secondary" %>
+            <%# link_to "閉じる", :back, class: "btn btn-outline-secondary back-btn" %>
+            <div class="btn btn-outline-secondary back-btn">閉じる</div>
           </div>
+
+          <% if @user.provider.nil? %>
+            <hr>
+            <div class="oauth">
+              <div class="col-6 offset-3 login-line">
+                <%= link_to image_tag("btn_line_login.png"), "https://line-login-starter-20220124.herokuapp.com?response_type=code&client_id=1656830695
+  &redirect_uri=https%3A%2F%2Fline-login-starter-20220124.herokuapp.com%2Fauth&state=#{SecureRandom.urlsafe_base64}&scope=openid%20email" %>
+              </div>
+              <div class="col-6 offset-3 login-google">
+                <%= link_to image_tag("btn_google_signin.png"), "/auth/google_oauth2" %>
+              </div>
+              <p><br>
+                ＊GoogleまたはLINEによるログインの際、ご登録のメールアドレスを取得できます。<br>
+                ＊取得を許可した場合、作成したタスクを自分宛に送信する際に使用できます。<br>
+                ＊当サイトでは、それ以外の目的では利用いたしません。<br>
+              </p>
+            </div>
+          <% end %>
+
         </div>
       <% end %>
     </div>

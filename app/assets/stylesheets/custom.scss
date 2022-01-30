@@ -2,7 +2,7 @@
   font-family: 'Sacramento', cursive;
   font-size: xx-large;
   color: white;
-  margin-left: 8%;
+  margin-left: 10%;
 }
 
 nav.navbar {
@@ -46,6 +46,14 @@ nav.navbar {
   position: relative;
   padding-top: 4rem;
 }
+
+.to_intro {
+  position: fixed;
+  left: 5%;
+  bottom: 5%;
+}
+
+
 
 .debug_dump {
   // clear: both;

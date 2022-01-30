@@ -7,6 +7,7 @@
 
     <%= stylesheet_link_tag 'application', media: 'all', 'data-turbolinks-track': 'reload' %>
     <%= javascript_pack_tag 'application', 'data-turbolinks-track': 'reload' %>
+    <%= javascript_pack_tag 'custom', 'data-turbolinks-track': 'reload' %>
 
     <!--[if lt IE 9]>
       <script src="//cdnjs.cloudflare.com/ajax/libs/html5shiv/r29/html5.min.js">
@@ -26,7 +27,6 @@
 
                 <% flash.each do |_, msg| %>
                   <div class="fs-6 text-white">
-                    <%= _.html_safe %>:
                     <%= msg.html_safe %>
                     <%# session[:flash] ? session[:flash]["flashes"]["_"] : "" %>
                   </div>
@@ -34,7 +34,7 @@
 
                 <div class="flex">
                   <% if logged_in? && @login_user.provider.present? %>
-                    <%= link_to "アカウント設定", edit_user_path(@login_user), remote: true, class: "nav-link" %>
+                    <%= link_to "アカウント修正", edit_user_path(@login_user), remote: true, class: "nav-link" %>
                     <%= link_to "ログアウト", logout_path, method: :delete, class: "nav-link" %>
                   <% elsif logged_in? %>
                     <%= link_to "アカウント登録", edit_user_path(@login_user), remote: true, class: "nav-link" %>

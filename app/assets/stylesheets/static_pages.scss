@@ -7,7 +7,7 @@
   // margin-left: -20%;
 }
 
-.modal {
+#login {
   margin-top: 5%;
 }
 
@@ -24,21 +24,38 @@
   margin-bottom: 5px;
 }
 
-.to_intro {
-  position: fixed;
-  left: 5%;
-  bottom: 5%;
-}
-
-.intro-modal {
-  height: 100px;
-  width: 80px;
+.modal.intro {
+  margin-top: 5%;
 }
 
 .image {
-  padding: 20px;
+  padding-bottom: 20px;
   height: 70%;
-  width: 70%;
+  width: 60%;
 }
 
+.modal-body {
+  padding-top: -100px;
+}
 
+.carousel-caption {
+  h5, p {
+    color: #6C757D;
+    text-shadow: 3px  3px 10px white,
+                  -3px  3px 10px white,
+                  3px -3px 10px white,
+                  -3px -3px 10px white;
+  }
+  p {
+    padding: 6px 0;
+    text-align: left;
+    vertical-align: middle;
+    display: inline-block;
+  }
+}
+
+.carousel-indicators {
+  button {
+    margin-bottom: 20px;
+  }
+}
