@@ -44,5 +44,16 @@ class User < ApplicationRecord
       return user
     end
   end
+
+  def self.line_omniauth(hash)
+    where(provider: hash["provider"], uid: hash["sub"]).first_or_initialize.tap do |user|
+      user.provider = hash["provider"]
+      user.uid = hash["sub"]
+      user.email = hash["email"]
+      user.oauth_token = hash["a_token"]
+      user.oauth_expires_at = Time.at(hash["exp"])
+      return user
+    end
+  end
   
 end

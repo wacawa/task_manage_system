@@ -47,4 +47,14 @@ module SessionsHelper
     @login_user = nil
   end
 
+
+  # create_line用
+  def get_resbody(uri, parameters)
+    parameters = URI.encode_www_form(parameters)
+    res = Net::HTTP.post(uri, parameters)
+    res_body = JSON.parse(res.body)
+    return res_body
+  end
+
+
 end
