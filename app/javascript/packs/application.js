@@ -1,6 +1,7 @@
 import '../stylesheets/application';
 import 'jquery/dist/jquery.js';
 import 'popper.js/dist/popper';
+import "bootstrap"
 import { Tooltip, Toast, Popover } from "bootstrap";
 
 
