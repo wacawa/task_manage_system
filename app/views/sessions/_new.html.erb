@@ -30,7 +30,14 @@
           <hr>
           <div class="oauth">
             <div class="col-6 offset-3 login-line">
-              <%= link_to image_tag("btn_line_login.png"), "https://access.line.me/oauth2/v2.1/authorize?response_type=code&client_id=#{ENV["LINE_CLIENT_ID"]}&redirect_uri=http%3A%2F%2Flocalhost%3A3000%2Fauth%2Fline&state=#{@line_state}&scope=openid%20email" %>
+              <%# link_to image_tag("btn_line_login.png"), "https://access.line.me/oauth2/v2.1/authorize?response_type=code&client_id=1656830695
+     &redirect_uri=https%3A%2F%2Fapi.line.me%2Foauth2%2Fv2.1%2Ftoken&state=#{SecureRandom.urlsafe_base64}&bot_prompt=normal&scope=openid%20email" %>
+              <%# link_to image_tag("btn_line_login.png"), "https://access.line.me/oauth2/v2.1/authorize?response_type=code&client_id=1656830695
+     &redirect_uri=http%3A%2F%2Flocalhost%3A3000%2Fauth%2Fline%2Fcallback%3Ferror%3Daccess_denied%26error_description%3DThe%2Bresource%2Bowner%2Bdenied%2Bthe%2Brequest.%26state%3D0987poi&state=#{SecureRandom.urlsafe_base64}&scope=openid%20email" %>
+              <%# link_to image_tag("btn_line_login.png"), "https://access.line.me/oauth2/v2.1/authorize?client_id=1656830695&&redirect_uri=http%3A%2F%2Flocalhost%3A3000%2Fauth%2Fline" %>
+              <%= link_to image_tag("btn_line_login.png"), login_line_path, method: :post %>
+              <%# link_to image_tag("btn_line_login.png"), "https://access.line.me/oauth2/v2.1/authorize?response_type=code&client_id=1656830695
+     &redirect_uri=https%3A%2F%2F000a-2400-2653-85e2-1900-9ded-b283-2b87-6d8b.ngrok.io%2Fauth%2Fline&state=#{SecureRandom.urlsafe_base64}&scope=openid%20email" %>
             </div>
             <div class="col-6 offset-3 login-google">
               <%= link_to image_tag("btn_google_signin.png"), "/auth/google_oauth2" %>

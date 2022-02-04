@@ -27,7 +27,6 @@ class UsersController < ApplicationController
   end
 
   def edit
-    @line_state = SecureRandom.urlsafe_base64
   end
 
   def update
