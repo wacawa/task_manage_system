@@ -9,6 +9,8 @@ class ApplicationController < ActionController::Base
     else
       redirect_to root_url
     end
+  rescue
+    redirect_to root_url
   end
 
   def create_user_url(user)

@@ -6,17 +6,19 @@
     <%# <p class="subtitle"> %>
     <%# </p> %>
     <div class="secondary"><br>
-      運動、食事、習慣、娯楽、仕事<br>
-      仔細に計画を立て<br>
-      24時間を使い倒しましょう♪<br><br>
-      〜汝、十二時に使われ、我、十二時を使い得たり〜<br><br>
+      <span class="span">運動、食事、習慣、娯楽、仕事</span><br>
+      <span class="span">仔細に計画を立て</span><br>
+      <span class="span">24時間を使い倒しましょう♪</span><br><br>
+      <span class="span">〜汝、十二時に使われ、</span><span class="span">我、十二時を使い得たり〜</span><br><br>
     </div>
     <div class="secondary">
-      早速、始めましょう！
-      <%= link_to "ゲスト", gest_login_path, method: :post, class: "btn btn-sm btn-secondary" %>
-      <span class="or secondary">or</span>
-      <%# アカウントをお持ちですか？　 %>
-      <%= link_to "ログイン", login_path, remote: true, class: "btn btn-sm btn-secondary" %>
+      <span class="span">早速、始めましょう！</span>
+      <span class="span">
+        <%= link_to "ゲスト", gest_login_path, method: :post, class: "btn btn-sm btn-secondary" %>
+        <span class="or secondary">or</span>
+        <%# アカウントをお持ちですか？　 %>
+        <%= link_to "ログイン", login_path, remote: true, class: "btn btn-sm btn-secondary" %>
+      </span>      
       <%# or %>
       <%# link_to "明日", gest_login_path(date: "tomorrow"), method: :post, class: "btn btn-sm btn-secondary" %>
     </div>

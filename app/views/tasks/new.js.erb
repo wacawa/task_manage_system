@@ -44,6 +44,7 @@ function plusbtn(){
 }
 
 $(".form-ftime").on("blur", function(){
-  val = $(this).val;
-  console.log(val);
+  val = $(this).val();
+  elem = $(this).parents("tr").nextAll("tr").children().children(".form-stime")[0];
+  $(elem).val(val);
 })

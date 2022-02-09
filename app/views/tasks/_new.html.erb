@@ -29,7 +29,7 @@
                       <% if i == 1 %>
                         <%= t.time_field :start_time, value: l(DateTime.now, format: :hstime), class: "form-control" %>
                       <% else %>
-                        <%= t.time_field :start_time, class: "form-control" %>
+                        <%= t.time_field :start_time, class: "form-control form-stime" %>
                       <% end %>
                     </td>
                     <td><%= t.time_field :finish_time, class: "form-control form-ftime" %></td>
