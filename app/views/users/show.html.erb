@@ -84,7 +84,7 @@
   <div class="today-view <%= cname %>">
     <canvas id="today" width="120" height="100"></canvas>
   </div>
-  <% if @prev.present? %>
+  <% if @user.provider.present? && @prev.present? %>
     <% time = @prev.start_datetime %>
     <% hash = {year: time.year, month: time.month, day: time.day, hour: time.hour} %>
     <div class="prev">
@@ -93,7 +93,7 @@
       <% end %>
     </div>
   <% end %>
-  <% if @next_time.present? %>
+  <% if @user.provider.present? && @next_time.present? %>
     <% time = @next_time %>
     <% hash = {year: time.year, month: time.month, day: time.day, hour: time.hour} %>
     <div class="next">
