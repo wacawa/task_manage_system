@@ -36,6 +36,8 @@ class SessionsController < ApplicationController
     # &redirect_uri=http%3A%2F%2Flocalhost%3A3000%2Fcallback&state=#{SecureRandom.urlsafe_base64}&scope=openid%20email"
     # redirect_to "https://access.line.me/oauth2/v2.1/authorize?response_type=code&client_id=1656830695
     # &redirect_uri=http%3A%2F%2Flocalhost%3A3000%2Fauth%2Fline%2F&state=#{state}&scope=openid%20email"
+    <%= link_to image_tag("btn_line_login.png"), "https://access.line.me/oauth2/v2.1/authorize?response_type=code&client_id=#{ENV["LINE_CLIENT_ID"]}&redirect_uri=http%3A%2F%2Flocalhost%3A3000%2Fauth%2Fline&state=#{@line_state}&scope=openid%20email" %>
+
   end
 
   def create_line
