@@ -2,7 +2,7 @@ Rails.application.routes.draw do
   root 'static_pages#top'
 
   get '/login', to: "sessions#new"
-  post '/auth/line', to: "sessions#create_line"
+  get '/auth/line', to: "sessions#create_line"
   post '/login/line', to: "sessions#line_login"
   get 'auth/:provider/callback', to: 'sessions#create'
   get 'auth/failure', to: redirect('/')
