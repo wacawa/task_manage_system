@@ -46,7 +46,8 @@ class SessionsController < ApplicationController
   def create_line
     if params[:code]
       uri = URI("https://api.line.me/oauth2/v2.1/token")
-      parameters = {grant_type: "authorization_code", code: params[:code],  redirect_uri: "http://localhost:3000/auth/line",
+      rd_uri = Rails.env.development? ? "http://localhost:3000/auth/line" : "https://sleepy-beyond-04608.herokuapp.com/auth/line"
+      parameters = {grant_type: "authorization_code", code: params[:code],  redirect_uri: rd_uri,
                     client_id: ENV["LINE_CLIENT_ID"], client_secret: ENV["LINE_CLIENT_SECRET"], code_verifier: SecureRandom.alphanumeric(100)}
       res_body = get_resbody(uri, parameters)
       if id_t = res_body["id_token"].presence
