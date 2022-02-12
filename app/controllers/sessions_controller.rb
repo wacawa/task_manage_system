@@ -40,8 +40,7 @@ class SessionsController < ApplicationController
       redirect_to "https://access.line.me/oauth2/v2.1/authorize?response_type=code&client_id=#{ENV["LINE_CLIENT_ID"]}&redirect_uri=http%3A%2F%2Flocalhost%3A3000%2Fauth%2Fline&state=#{state}&scope=openid%20email"
     elsif Rails.env.production?
       debugger
-      # redirect_to "https://access.line.me/oauth2/v2.1/authorize?response_type=code&client_id=#{ENV["LINE_CLIENT_ID"]}&redirect_uri=https%3A%2F%2Fsleepy-beyond-04608.herokuapp.com%2Fauth%2Fline&state=#{state}&scope=openid%20email"
-      redirect_to "https://access.line.me/oauth2/v2.1/authorize?response_type=code&client_id=12039348&redirect_uri=https%3A%2F%2Fsleepy-beyond-04608.herokuapp.com%2Fauth%2Fline&state=#{state}&scope=openid%20email"
+      redirect_to "https://access.line.me/oauth2/v2.1/authorize?response_type=code&client_id=#{ENV["LINE_CLIENT_ID"]}&redirect_uri=https%3A%2F%2Fsleepy-beyond-04608.herokuapp.com%2Fauth%2Fline&state=#{state}&scope=openid%20email"
     end
   end
 
