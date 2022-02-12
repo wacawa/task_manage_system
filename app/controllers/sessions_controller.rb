@@ -40,6 +40,8 @@ class SessionsController < ApplicationController
     if Rails.env.development?
       redirect_to "https://access.line.me/oauth2/v2.1/authorize?response_type=code&client_id=#{l_c_i}&redirect_uri=http%3A%2F%2Flocalhost%3A3000%2Fauth%2Fline&state=#{state}&scope=openid%20email"
     elsif Rails.env.production?
+      logger.debug(l_c_i)
+      l_c_i = ENV["LINE_CLIENT_ID"]
       redirect_to "https://access.line.me/oauth2/v2.1/authorize?response_type=code&client_id=#{l_c_i}&redirect_uri=https%3A%2F%2Fsleepy-beyond-04608.herokuapp.com%2Fauth%2Fline&state=#{state}&scope=openid%20email"
     end
   end
