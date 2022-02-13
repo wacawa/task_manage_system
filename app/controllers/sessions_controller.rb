@@ -45,7 +45,6 @@ class SessionsController < ApplicationController
   end
 
   def create_line
-    debugger
     if params[:code]
       uri = URI("https://api.line.me/oauth2/v2.1/token")
       rd_uri = Rails.env.development? ? "http://localhost:3000/auth/line" : "https://sleepy-beyond-04608.herokuapp.com/auth/line"
