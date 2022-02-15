@@ -39,12 +39,15 @@ class SessionsController < ApplicationController
     if Rails.env.development?
       redirect_to "https://access.line.me/oauth2/v2.1/authorize?response_type=code&client_id=#{ENV["LINE_CLIENT_ID"]}&redirect_uri=http%3A%2F%2Flocalhost%3A3000%2Fauth%2Fline&state=#{state}&scope=openid%20email"
     elsif Rails.env.production?
+      logger.debug(ENV["LINE_CLIENT_ID"])
       c_id = "1656830695"
+      c_id = ENV["LINE_CLIENT_ID"]
       redirect_to "https://access.line.me/oauth2/v2.1/authorize?response_type=code&client_id=#{c_id}&redirect_uri=https%3A%2F%2Fsleepy-beyond-04608.herokuapp.com%2Fauth%2Fline&state=#{state}&scope=openid%20email"
     end
   end
 
   def create_line
+    logger.debug(ENV["LINE_CLIENT_ID"])
     if params[:code]
       uri = URI("https://api.line.me/oauth2/v2.1/token")
       rd_uri = Rails.env.development? ? "http://localhost:3000/auth/line" : "https://sleepy-beyond-04608.herokuapp.com/auth/line"
