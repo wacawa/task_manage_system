@@ -23,5 +23,7 @@ test:
 
 production:
   <<: *default
+  adapter: postgresql #
   encoding: utf-8
-  database: db/production.sqlite3
+  database: db/production.postgresql
+  # database: db/production.sqlite3
