@@ -2,7 +2,6 @@ class StaticPagesController < ApplicationController
   before_action :not_access, only: :top
   
   def top
-    logger.debug "a"
   end
 
   def gest_login
