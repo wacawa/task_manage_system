@@ -2,7 +2,7 @@ import '../stylesheets/application';
 import 'jquery/dist/jquery.js';
 import 'popper.js/dist/popper';
 import "bootstrap"
-import { Tooltip, Toast, Popover } from "bootstrap";
+// import { Tooltip, Toast, Popover } from "bootstrap";
 
 
 // This file is automatically compiled by Webpack, along with any other files

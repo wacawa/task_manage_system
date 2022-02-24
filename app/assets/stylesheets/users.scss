@@ -13,9 +13,10 @@
   display: flex;
   position: absolute;
   align-items: center;
-  width: 100%;
+  width: 86%;
   height: var(--time-div-height);
   // border: red solid 1px;
+  padding-left:  14%;
 }
 .now-line:after {
   border: #6c757d solid 1px;
@@ -28,12 +29,12 @@
   color: white;
   position: absolute;
   border: #6c757d solid;
-  width: 50%;
+  width: 40%;
   // height: calc(100% - 74px);
   // height: auto;
   background-color: #6c757d;
   opacity: 0.7;
-  margin-left: 30%;
+  margin-left: 35%;
   // padding: 30px 50px;
   border: white solid 1px;
   border-radius: 50px;
@@ -80,14 +81,14 @@
 .axis {
   position: absolute;
   border-right: #6c757d solid 5px;
-  margin-left: 18%;
+  margin-left: 25%;
   // height: calc(100% - 74px);
   height: 100%;
 }
 
 .time {
   vertical-align: middle;
-  padding: 6%;
+  padding: 10% 15%;
 }
 
 .hour {

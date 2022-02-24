@@ -49,6 +49,16 @@
                 <tr class="plustr">
                   <td colspan="4" onclick="plusbtn()"><div class="plusbtn">＋</div></td>
                 </tr>
+                <% if @tasks.present? %>
+                  <% @tasks.each do |t| %>
+                    <tr>
+                      <td><%= l(t.start_time, format: :time) %></td>
+                      <td><%= l(t.finish_time, format: :time) %></td>
+                      <td><%= t.title %></td>
+                      <td><%= t.memo.nil? ? t.memo : safe_join(t.memo.split("\n"),tag(:br)) %></td>
+                    </tr>
+                  <% end %>
+                <% end %>
               </tbody>
             </table>
             <div class="d-grid d-md-flex gap-2 justify-content-md-center">

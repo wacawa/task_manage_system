@@ -144,7 +144,14 @@ window.addEventListener("load", function(){
   // setInterval(clock, 1000);
   setInterval(now_line, 1100);
   setInterval(today, 60000);
+  setInterval(now, 30000);
 }, false);
+
+var now = function(){
+  var elem = $(".navbar-text");
+  var now_time = time()[5] + "/" + time()[4] + "/" + time()[3] + " " + time()[0] + ":" + time()[1]
+  elem.text(now_time);
+}
 
 var time = function(){
   const now = new Date();
@@ -152,7 +159,9 @@ var time = function(){
   const minute = now.getMinutes().toString().padStart(2, '0');
   const second = now.getSeconds().toString().padStart(2, '0');
   const day = now.getDate().toString().padStart(2, '0');
-  return [hour, minute, second, day]
+  const month = (now.getMonth() + 1).toString().padStart(2, '0');
+  const year = now.getFullYear().toString().slice(-2)
+  return [hour, minute, second, day, month, year]
 }
 
 var elemtop = function(hour, minute, second, day){
@@ -283,7 +292,8 @@ function today() {
     ctx.font = "15px sans-serif";
     ctx.textAlign = "center";
     ctx.textBaseline = "middle";
-    ctx.strokeText(date, 60, 50)
+    ctx.fillStyle = "#6c757d";
+    ctx.fillText(date, 60, 50)
     // ctx.stroke();
 
     // ctx.fillStyle = "#6c757d"

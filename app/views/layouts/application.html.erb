@@ -17,40 +17,36 @@
   </head>
 
   <body>
-    <div class="container">
-      <%# <div class="row"> %>
-        <%# <div class="col-md-12"> %>
-          <div class="header">
-            <nav class="navbar fixed-top bg-secondary">
-              <div class="container-md">
-                <%= link_to "TimeBoxing",  "#", id: "logo", class: "navbar-brand" %>
-                <%# link_to image_tag("user-icon.png", size: "35x35"), "#login_path", class: "btn rounded-circle p-2" %>
+    <nav class="navbar navbar-expand-lg fixed-top bg-secondary">
+      <%= link_to "TimeBoxing",  "#", id: "logo", class: "navbar-brand" %>
+      <%# link_to image_tag("user-icon.png", size: "35x35"), "#login_path", class: "btn rounded-circle p-2" %>
+      <div class="collapse navbar-collapse">
+        <ul class="navbar-nav mr-auto">
+          <% if logged_in? && @login_user.provider.present? %>
+            <li class="nav-item"><%= link_to "アカウント修正", edit_user_path(@login_user), remote: true, class: "nav-link" %></li>
+            <li class="nav-item"><%= link_to "ログアウト", logout_path, method: :delete, class: "nav-link" %></li>
+          <% elsif logged_in? %>
+            <li class="nav-item"><%= link_to "アカウント登録", edit_user_path(@login_user), remote: true, class: "nav-link" %></li>
+            <li class="nav-item"><%= link_to "退出", logout_path, method: :delete, data: {confirm: "すべての予定が削除されます。よろしいですか？"}, class: "nav-link" %></li>
+          <% end %>
+        </ul>
+      </div>
+      <% flash.each do |_, msg| %>
+        <div class="white right-20">
+          <%= msg.html_safe %>
+          <%# session[:flash] ? session[:flash]["flashes"]["_"] : "" %>
+        </div>
+      <% end %>
+      <span class="navbar-text white"><%= l(Time.now, format: :long) if params[:action] == "show" %></span>
+    </nav>
 
-                <% flash.each do |_, msg| %>
-                  <div class="fs-6 text-white">
-                    <%= msg.html_safe %>
-                    <%# session[:flash] ? session[:flash]["flashes"]["_"] : "" %>
-                  </div>
-                <% end %>
-
-                <div class="flex">
-                  <% if logged_in? && @login_user.provider.present? %>
-                    <%= link_to "アカウント修正", edit_user_path(@login_user), remote: true, class: "nav-link" %>
-                    <%= link_to "ログアウト", logout_path, method: :delete, class: "nav-link" %>
-                  <% elsif logged_in? %>
-                    <%= link_to "アカウント登録", edit_user_path(@login_user), remote: true, class: "nav-link" %>
-                    <%= link_to "退出", logout_path, method: :delete, data: {confirm: "すべての予定が削除されます。よろしいですか？"}, class: "nav-link" %>
-                  <% end %>
-                </div>
-              </div>
-            </nav>
-          </div>
+          <%# </div> %>
           <div class="main">
             <%= yield %>
           </div>
         <%# </div> %>
       <%# </div> %>
     <%# debug(params) if Rails.env.development? %>
-    </div>
+    <%# </div> %>
   </body>
 </html>

@@ -5,6 +5,7 @@ class TasksController < ApplicationController
     @day = params[:day]
     @hour = params[:hour]
     @form = Form::TaskCollection.new
+    @tasks = @user.tasks.where("start_datetime > ?", Time.now.yesterday).where("start_datetime < ?", Time.now).order(:start_time)
   end
 
   def create
