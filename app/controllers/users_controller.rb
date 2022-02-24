@@ -18,6 +18,7 @@ class UsersController < ApplicationController
     @next_time = @next.start_datetime if @next.present?
     time = (session[:default_time].map{|_,v|v}.join("-") + ":00:00").to_time
     @next_time ||= time if time.is_a?(Time) && @time < time
+    debugger
   end
 
   def destroy

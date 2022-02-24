@@ -50,6 +50,7 @@
                   <td colspan="4" onclick="plusbtn()"><div class="plusbtn">＋</div></td>
                 </tr>
                 <% if @tasks.present? %>
+                  <tr><td colspan="4">↓ 追加済みの予定 ↓</td></tr>
                   <% @tasks.each do |t| %>
                     <tr>
                       <td><%= l(t.start_time, format: :time) %></td>
