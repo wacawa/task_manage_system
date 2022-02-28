@@ -6,6 +6,14 @@ class TasksController < ApplicationController
     @hour = params[:hour]
     @form = Form::TaskCollection.new
     @tasks = @user.tasks.where("start_datetime > ?", Time.now.yesterday).where("start_datetime < ?", Time.now).order(:start_time)
+    if @tasks.present?
+      if task = @tasks.where("start_time < ?", Time.now).where("finish_time > ?", Time.now).presence
+        tasks = @tasks.where("start_time >= ?", task.first.start_time)
+        array = tasks.pluck(:finish_time) - tasks.pluck(:start_time)
+        @first_time = array.first
+      end
+    end
+    @first_time ||= Time.now
   end
 
   def create
@@ -15,11 +23,12 @@ class TasksController < ApplicationController
       # redirect_to request.referer
       redirect_to create_user_url(@user)
     else
-      @form.tasks.count > 1 ? flash.now[:_] = "一部のタスクの作成に失敗しました" : flash.now[:_] = "×"
+      debugger
+      flash[:_] = @form.valid?.include?(true) ? "一部のタスクの作成に失敗しました" : "×"
       # render "users/show", day: params[:day], hour: params[:hour]
       # redirect_back(fallback_location: session[:default_url])
-      flash.now[:_] = "×"
-      render "users/show"
+      redirect_to create_user_url(@user)
+      # render "users/show"
     end
   end
 

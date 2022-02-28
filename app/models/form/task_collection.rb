@@ -9,7 +9,7 @@ class Form::TaskCollection < Form::Base
 
   def tasks_attributes=(attributes)
     plus = []
-    attributes = attributes.select {|_, task_attributes| task_attributes[:start_time].present? && task_attributes[:finish_time].present?}
+    attributes = attributes.select {|_, task_attributes| task_attributes[:start_time].present? && task_attributes[:title].present?}
     self.tasks = attributes.map do |_, task_attributes|
       # if task_attributes[:start_time].present? && task_attributes[:finish_time].present? && task_attributes[:start_datetime].present?
         Form::Task.new(task_attributes).tap do |val|
@@ -53,18 +53,20 @@ class Form::TaskCollection < Form::Base
     self.tasks.concat(plus)
   end
 
-  def valid?
-    valid_tasks = target_tasks.map(&:valid?).all?
-    super && valid_tasks
-  end
-
   def save
     booleans = []
     Task.transaction { target_tasks.each{|v| booleans << v.save} }
-    booleans.all?
+    booleans.present? && booleans.all?
   end
 
   def target_tasks
-    self.tasks.select { |v| v.finish_time.present? }
+    self.tasks.select { |v| v.title.present? }
   end
+
+  def valid?
+    valid_tasks = target_tasks.map(&:valid?)
+    # .all?
+    super && valid_tasks
+  end
+
 end

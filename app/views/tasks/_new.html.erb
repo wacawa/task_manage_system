@@ -27,7 +27,7 @@
                   <tr class=<%= c %>>
                     <td>
                       <% if i == 1 %>
-                        <%= t.time_field :start_time, value: l(DateTime.now, format: :hstime), class: "form-control" %>
+                        <%= t.time_field :start_time, value: l(@first_time, format: :hstime), class: "first_time form-control" %>
                       <% else %>
                         <%= t.time_field :start_time, class: "form-control form-stime" %>
                       <% end %>
@@ -49,17 +49,6 @@
                 <tr class="plustr">
                   <td colspan="4" onclick="plusbtn()"><div class="plusbtn">＋</div></td>
                 </tr>
-                <% if @tasks.present? %>
-                  <tr><td colspan="4">↓ 追加済みの予定 ↓</td></tr>
-                  <% @tasks.each do |t| %>
-                    <tr>
-                      <td><%= l(t.start_time, format: :time) %></td>
-                      <td><%= l(t.finish_time, format: :time) %></td>
-                      <td><%= t.title %></td>
-                      <td><%= t.memo.nil? ? t.memo : safe_join(t.memo.split("\n"),tag(:br)) %></td>
-                    </tr>
-                  <% end %>
-                <% end %>
               </tbody>
             </table>
             <div class="d-grid d-md-flex gap-2 justify-content-md-center">
@@ -68,6 +57,28 @@
               <%# link_to "閉じる", :back, class: "btn btn-outline-secondary" %>
               <div class="btn btn-outline-secondary back-btn">閉じる</div>
             </div>
+          <% end %>
+          <% if @tasks.present? %>
+            <br>
+            <table class="table table-bordered border-secondary align-middle center-middle">
+              <tbody class="secondary">
+                <tr><td colspan="4">↓ 追加済みの予定 ↓</td></tr>
+                <tr>
+                  <th><%= Task.human_attribute_name(:start_time) %></th>
+                  <th><%= Task.human_attribute_name(:finish_time) %></th>
+                  <th><%= Task.human_attribute_name(:title) %></th>
+                  <th><%= Task.human_attribute_name(:memo) %></th>
+                </tr>
+                <% @tasks.each do |t| %>
+                  <tr>
+                    <td><%= l(t.start_time, format: :time) %></td>
+                    <td><%= l(t.finish_time, format: :time) %></td>
+                    <td><%= t.title %></td>
+                    <td><%= t.memo.nil? ? t.memo : safe_join(t.memo.split("\n"),tag(:br)) %></td>
+                  </tr>
+                <% end %>
+              </tbody>
+            </table>
           <% end %>
         </div>
       </div>
