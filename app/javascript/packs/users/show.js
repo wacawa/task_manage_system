@@ -220,8 +220,17 @@ function set_task(){
       var cname = cname_array[1].substr(5)
       var range = cname_array[2].substr(6)
       var div_height = $(":root").css("--time-div-height").slice(0, -2)
-      if(range <= 15){
-        var changedivheight = div_height * 15
+      if($(".task-form").length && range <= 40){
+        var changedivheight = div_height * 20
+        range = changedivheight + (range - 1) * div_height
+        boolean = cname.endsWith("00");
+        if(boolean){
+          var changediv = $("."+cname).next().attr("class").split(" ")[0];
+          $("."+changediv).css("height", changedivheight)
+        }else{
+          $("."+cname).css("height", changedivheight)
+        }
+      }else if(range <= 15){
         range = changedivheight + (range - 1) * div_height
         boolean = cname.endsWith("00");
         if(boolean){

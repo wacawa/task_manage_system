@@ -24,7 +24,7 @@ class SessionsController < ApplicationController
       # params[:session][:remember_me] == "1" ? remember(user) : forget(user)
       redirect_user(user, "おかえりなさいませ♪")
     else
-      flash[:_] = "もう一度お願いします。"
+      flash.now[:_] = "もう一度お願いします。"
       redirect_to root_url(email: email)
     end
   end

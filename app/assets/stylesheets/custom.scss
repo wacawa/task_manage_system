@@ -12,7 +12,7 @@
 .nav-item {
   .nav-link {
     color: white;
-    &:hover {
+    &:hover, &:focus {
       color: white;
       opacity: 0.5;
     }

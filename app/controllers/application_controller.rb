@@ -31,6 +31,10 @@ class ApplicationController < ActionController::Base
     login(user)
     remember(user)
     now = DateTime.now
+    limit = user.tasks.order(:start_datetime).pluck(:start_datetime).last
+    if limit && limit.tomorrow > now
+      now = limit
+    end
     session[:default_time] = {year: now.year, month: now.month, day: now.day, hour: now.hour}
     flash[:_] = text
     redirect_to user_url(user, session[:default_time])
