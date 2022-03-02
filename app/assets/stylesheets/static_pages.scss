@@ -43,8 +43,13 @@
 }
 
 .carousel-caption {
-  h5, p {
+  #logo {
     color: #6C757D;
+    // color: red;
+  }
+  h5, p{
+    color: #6C757D;
+    // color: red;
     text-shadow: 3px  3px 10px white,
                   -3px  3px 10px white,
                   3px -3px 10px white,
@@ -55,6 +60,9 @@
     text-align: left;
     vertical-align: middle;
     display: inline-block;
+  }
+  h3 {
+    margin-right: 10%;
   }
 }
 
