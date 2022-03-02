@@ -223,7 +223,7 @@ function set_task(){
       if($(".task-form").length && range <= 40){
         var changedivheight = div_height * 35 
       }else if(range <= 15){
-        var changedivheight = div_height * 25
+        var changedivheight = div_height * 20
       }
       if($(".task-form").length && range <= 40 || range <= 15){
         range = changedivheight + (range - 1) * div_height
