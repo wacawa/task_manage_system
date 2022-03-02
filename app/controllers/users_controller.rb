@@ -45,7 +45,7 @@ class UsersController < ApplicationController
     t = session[:default_time].map{|k,v| v}
     # time = "#{params[:year]}-#{params[:month]}-#{params[:day]} #{params[:hour]}:00:00".to_time
     time = "#{t[0]}-#{t[1]}-#{t[2]} #{t[3]}:00:00".to_time
-    tasks = @user.tasks.where("start_datetime LIKE ?", time)
+    tasks = @user.tasks.where(start_datetime: time)
     @tasks = tasks.where("finish_time > ?", Time.now).order(:start_time)
     TaskMailer.send_tasks(@user, @tasks).deliver_now
     flash[:mail] = "送信しました。"
