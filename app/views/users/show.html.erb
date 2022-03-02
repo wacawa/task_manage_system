@@ -36,7 +36,7 @@
               <%= f.time_field :finish_time, class: "form-control  text-secondary" %>
             </div>
           </div>
-            <%= f.text_area :memo, rows: "5", class: "form-control text-secondary" %>
+            <%= f.text_area :memo, rows: "5", class: "form-control text-secondary", placeholder: "詳細" %>
             <%= f.hidden_field :start_datetime %>
             <%= f.submit "送信", class: "btn btn-light btn-outline-secondary" %>
             <%= link_to "キャンセル", user_path(request.query_parameters.except(:task_id)), class: "btn btn-light btn-outline-secondary" %>

@@ -221,16 +221,11 @@ function set_task(){
       var range = cname_array[2].substr(6)
       var div_height = $(":root").css("--time-div-height").slice(0, -2)
       if($(".task-form").length && range <= 40){
-        var changedivheight = div_height * 20
-        range = changedivheight + (range - 1) * div_height
-        boolean = cname.endsWith("00");
-        if(boolean){
-          var changediv = $("."+cname).next().attr("class").split(" ")[0];
-          $("."+changediv).css("height", changedivheight)
-        }else{
-          $("."+cname).css("height", changedivheight)
-        }
+        var changedivheight = div_height * 35 
       }else if(range <= 15){
+        var changedivheight = div_height * 25
+      }
+      if($(".task-form").length && range <= 40 || range <= 15){
         range = changedivheight + (range - 1) * div_height
         boolean = cname.endsWith("00");
         if(boolean){
@@ -239,8 +234,19 @@ function set_task(){
         }else{
           $("."+cname).css("height", changedivheight)
         }
+      // }else if(range <= 15){
+      //   var changedivheight = div_height * 20
+      //   range = changedivheight + (range - 1) * div_height
+      //   boolean = cname.endsWith("00");
+      //   if(boolean){
+      //     console.log(1)
+      //     var changediv = $("."+cname).next().attr("class").split(" ")[0];
+      //     $("."+changediv).css("height", changedivheight)
+      //   }else{
+      //     $("."+cname).css("height", changedivheight)
+      //   }
       }else{
-        range = range * div_height// - div_height / 2;
+      range = range * div_height// - div_height / 2;
       }
       var top = Math.floor($("."+cname).offset().top) - navbar - div_height * 1.4;
       $(this).css("top", top);
