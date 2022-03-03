@@ -86,7 +86,7 @@
   </div>
   <% if @user.provider.present? && @prev.present? %>
     <% time = @prev.start_datetime %>
-    <% hash = {year: time.year, month: time.month, day: time.day, hour: time.hour} %>
+    <% hash = {year: time.year, month: time.month, day: time.day, hour: time.hour, prev: true} %>
     <div class="prev">
       <%= link_to user_path(@user, hash) do %> 
         <%= image_tag("arrow-left.png") %>
@@ -95,7 +95,7 @@
   <% end %>
   <% if @user.provider.present? && @next_time.present? %>
     <% time = @next_time %>
-    <% hash = {year: time.year, month: time.month, day: time.day, hour: time.hour} %>
+    <% hash = {year: time.year, month: time.month, day: time.day, hour: time.hour, next: true} %>
     <div class="next">
       <%= link_to user_path(@user, hash) do %> 
         <%= image_tag("arrow-right.png") %>

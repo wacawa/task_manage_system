@@ -9,6 +9,12 @@ $(window).on("load", function(){
     });
     // var form = document.getElementsByClassName("form-control");
     // form.classList.add("field_with_errors")
+  }else if(param.indexOf("error") === 1){
+    $.ajax({
+      type: 'GET',
+      url: '/login',
+      data: {error: "true"},
+    });
   };
 });
 

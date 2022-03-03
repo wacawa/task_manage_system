@@ -2,6 +2,7 @@ class UsersController < ApplicationController
   before_action :set_user, except: [:logged_in_user]
   before_action :logged_in_user, only: :show
   before_action :correct_user, only: :show
+  before_action :session_update, only: :show
   before_action :create_tasks, only: :show
 
   def show
@@ -13,8 +14,8 @@ class UsersController < ApplicationController
     @hour = @time.hour
     @end_hour = @hour + 24
     @edit_task = @user.tasks.find(params[:task_id]) if params[:task_id]
-    @prev = @user.tasks.order(:start_datetime).where("start_datetime < ?", @time).last
-    @next = @user.tasks.order(:start_datetime).where("start_datetime > ?", @time).first
+    @prev = @user.tasks.where("start_datetime < ?", @time).order(:start_datetime).last
+    @next = @user.tasks.where("start_datetime > ?", @time).order(:start_datetime).first
     @next_time = @next.start_datetime if @next.present?
     time = (session[:default_time].map{|_,v|v}.join("-") + ":00:00").to_time
     @next_time ||= time if time.is_a?(Time) && @time < time
@@ -34,9 +35,11 @@ class UsersController < ApplicationController
       flash[:user_update] = "⚪︎"
       redirect_to create_user_url(@user)
     else
-      flash.now[:user_unupdate] = "×"
+      # flash.now[:user_unupdate] = "×"
+      flash[:user_unupdate] = "×"
       # redirect_back fallback_location: session[:default_url]
-      render :show
+      # render :show
+      redirect_to create_user_url(@user)
     end
   end
 
@@ -76,6 +79,17 @@ class UsersController < ApplicationController
       end
     end
 
+    def session_update
+      if @user.provider.present?
+        hash = session[:default_time].empty? ? {} : session[:default_time]
+        time = hash.empty? ? false : "#{hash["year"]}-#{hash["month"]}-#{hash["day"]} #{hash["hour"]}:00:00".to_time
+        if time && time.tomorrow <= Time.now.beginning_of_hour
+          datetime = time.tomorrow
+          session[:default_time] = {year: datetime.year, month: datetime.month, day: datetime.day, hour: datetime.hour}
+        end
+      end
+    end
+
     def create_tasks
       if @user.provider.blank?
         user_ex_date(@user)
@@ -96,25 +110,18 @@ class UsersController < ApplicationController
           @tasks = @user.tasks.where(start_datetime: @time).order(:start_time)
         end
       else
-        if params[:year] && params[:month] && params[:day] && params[:hour]
+        if params[:prev] || params[:next]
           @time = "#{params[:year]}-#{params[:month]}-#{params[:day]} #{params[:hour]}:00:00".to_time
-          s_datetime = @user.tasks.where("start_datetime > ?", @time).any?
-          hash = session[:default_time].empty? ? {} : session[:default_time]
-          time = hash.empty? ? false : "#{hash["year"]}-#{hash["month"]}-#{hash["day"]} #{hash["hour"]}:00:00".to_time
-          if !s_datetime && time && time.tomorrow <= Time.now
-            datetime = @time.tomorrow
-            session[:default_time] = {year: datetime.year, month: datetime.month, day: datetime.day, hour: datetime.hour}
-            redirect_to create_user_url(@user)
-          end
         else
-          @time = Time.now.beginning_of_hour
-          @task = @user.tasks.where("start_datetime > ?", @time.yesterday).where("start_datetime <= ?", @time).order(:start_datetime).last
-          # t = @time
-          # params[:year] = t.year
-          # params[:month] = t.month
-          # params[:day] = t.day
-          # params[:hour] = t.hour
-          @time = @task.start_datetime if @task.present?
+          @time = "#{params[:year]}-#{params[:month]}-#{params[:day]} #{params[:hour]}:00:00".to_time if params[:year] && params[:month] && params[:day] && params[:hour]
+          @task = @user.tasks.where("start_datetime > ?", @time.yesterday).where("start_datetime <= ?", @time).order(:start_datetime).last if @time
+          if @task.present?
+            @time = @task.start_datetime 
+          else
+            @task = @user.tasks.where("start_datetime > ?", @time).order(:start_datetime).first if @time
+            @time = @task.start_datetime if @task.present?
+          end
+          @time ||= Time.now.beginning_of_hour
           session[:default_time] = {year: @time.year, month: @time.month, day: @time.day, hour: @time.hour} if session[:default_time].empty?
         end
         @tasks = @user.tasks.where(start_datetime: @time).order(:start_time)

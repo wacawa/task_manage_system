@@ -29,6 +29,11 @@
           </div>
           <hr>
           <div class="oauth">
+            <% if params[:error].present? %>
+              <ul>
+                <li>認証に失敗しました。</li>
+              </ul>
+            <% end %>
             <div class="col-6 offset-3 login-line">
               <%# link_to image_tag("btn_line_login.png"), "https://access.line.me/oauth2/v2.1/authorize?response_type=code&client_id=1656830695
      &redirect_uri=https%3A%2F%2Fapi.line.me%2Foauth2%2Fv2.1%2Ftoken&state=#{SecureRandom.urlsafe_base64}&bot_prompt=normal&scope=openid%20email" %>

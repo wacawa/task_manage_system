@@ -1,19 +1,25 @@
 class SessionsController < ApplicationController
   def new
     @email = params[:email].gsub(/%40/, "@") unless params[:email].nil?
+    @login_error = params[:error]
     @line_state = SecureRandom.urlsafe_base64
   end
 
   def create
     password = SecureRandom.urlsafe_base64
     user = User.from_omniauth(request.env["omniauth.auth"])
-    user.id = User.last.id + 1
+    id = 1 unless User.exists?
+    id ||= User.last.id + 1
+    user.id = id
     user.password = password
     if user.save
       redirect_user(user, "おかえりなさいませ♪")
     else
-      flash.now[:_] = "もう一度お願いします。"
-      render "users/show"
+      # flash.now[:_] = "もう一度お願いします。"
+      flash[:_] = "もう一度お願いします。"
+      # render "users/show"
+      # redirect_to create_user_url(user)
+      redirect_to root_url(error: true)
     end
   end
 
@@ -64,13 +70,19 @@ class SessionsController < ApplicationController
         if user.save
           redirect_user(user, "lineログインに成功しました。")
         else
-          flash.now[:_] = "もう一度お願いします。"
-          render "users/show"
+          # flash.now[:_] = "もう一度お願いします。"
+          flash[:_] = "もう一度お願いします。"
+          # render "users/show"
+          # redirect_to create_user_url(user)
+          redirect_to root_url(error: true)
         end
       end
     elsif params[:error]
-      flash.now[:_] = "LINEログインに失敗しました。"
-      render "users/show"
+      # flash.now[:_] = "LINEログインに失敗しました。"
+      flash[:_] = "LINEログインに失敗しました。"
+      # render "users/show"
+      # redirect_to create_user_url(user)
+      redirect_to root_url(error: true)
     end
   end
 

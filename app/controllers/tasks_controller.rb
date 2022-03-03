@@ -23,7 +23,6 @@ class TasksController < ApplicationController
       # redirect_to request.referer
       redirect_to create_user_url(@user)
     else
-      debugger
       flash[:_] = @form.valid?.include?(true) ? "一部のタスクの作成に失敗しました" : "×"
       # render "users/show", day: params[:day], hour: params[:hour]
       # redirect_back(fallback_location: session[:default_url])
