@@ -7,13 +7,25 @@ class SessionsController < ApplicationController
 
   def create
     password = SecureRandom.urlsafe_base64
-    user = User.from_omniauth(request.env["omniauth.auth"])
+    user = User.from_omniauth(login_user, request.env["omniauth.auth"])
     id = 1 unless User.exists?
-    id ||= User.last.id + 1
-    user.id = id
-    user.password = password
+    id = User.exists? ? User.last.id + 1 : 1
+    password = SecureRandom.urlsafe_base64
+    user.password = password if user.id.present?
+    user.id ||= id
     if user.save
-      redirect_user(user, "おかえりなさいませ♪")
+      if login_user && login_user != user
+        if login_user.tasks.exists?
+          time = Time.now.beginning_of_hour
+          hour = user.tasks.exists? ? user.tasks.order(:start_datetime).last.start_datetime.hour : false
+          datetime = hour ? time.change(hour: hour) : login_user.tasks.order(:start_datetime).last.start_datetime
+          login_user.tasks.each do |task|
+            task.update(user_id: user.id, start_datetime: datetime)
+          end
+        end
+        logout
+      end
+      redirect_user(user, "Googleログインに成功しました。")
     else
       # flash.now[:_] = "もう一度お願いします。"
       flash[:_] = "もう一度お願いします。"
@@ -28,7 +40,7 @@ class SessionsController < ApplicationController
     user = User.find_by(email: email)
     if user && user.authenticate(params[:session][:password])
       # params[:session][:remember_me] == "1" ? remember(user) : forget(user)
-      redirect_user(user, "おかえりなさいませ♪")
+      redirect_user(user, "ログインに成功しました。")
     else
       flash.now[:_] = "もう一度お願いします。"
       redirect_to root_url(email: email)
@@ -63,11 +75,23 @@ class SessionsController < ApplicationController
         res_body = get_resbody(uri, parameters)
         res_body["a_token"] = a_token
         res_body["provider"] = "line"
-        user = User.line_omniauth(res_body)
-        user.id ||= User.last.id + 1
-        password ||= SecureRandom.urlsafe_base64
-        user.password = password
+        user = User.line_omniauth(login_user, res_body)
+        id = User.exists? ? User.last.id + 1 : 1
+        password = SecureRandom.urlsafe_base64
+        user.password = password if user.id.present?
+        user.id ||= id
         if user.save
+          if login_user && login_user != user
+            if login_user.tasks.exists?
+              time = Time.now.beginning_of_hour
+              hour = user.tasks.exists? ? user.tasks.order(:start_datetime).last.start_datetime.hour : false
+              datetime = hour ? time.change(hour: hour) : login_user.tasks.order(:start_datetime).last.start_datetime
+              login_user.tasks.each do |task|
+                task.update(user_id: user.id, start_datetime: datetime)
+              end
+            end
+            logout
+          end
           redirect_user(user, "lineログインに成功しました。")
         else
           # flash.now[:_] = "もう一度お願いします。"

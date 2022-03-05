@@ -34,8 +34,11 @@ class User < ApplicationRecord
     update_attribute(:remember_digest, nil)
   end
 
-  def self.from_omniauth(auth)
-    where(provider: auth.provider, uid: auth.uid).first_or_initialize.tap do |user|
+  def self.from_omniauth(login_user, auth)
+    user = login_user if login_user
+    where(provider: auth.provider, uid: auth.uid).first_or_initialize.tap do |u|
+      user = u unless u.id.nil?
+      user ||= u
       user.provider = auth.provider
       user.uid = auth.uid
       user.email = auth.info.email
@@ -45,8 +48,11 @@ class User < ApplicationRecord
     end
   end
 
-  def self.line_omniauth(hash)
-    where(provider: hash["provider"], uid: hash["sub"]).first_or_initialize.tap do |user|
+  def self.line_omniauth(login_user, hash)
+    user = login_user if login_user
+    where(provider: hash["provider"], uid: hash["sub"]).first_or_initialize.tap do |u|
+      user = u unless u.id.nil?
+      user ||= u
       user.provider = hash["provider"]
       user.uid = hash["sub"]
       user.email = hash["email"]

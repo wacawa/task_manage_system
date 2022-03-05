@@ -61,6 +61,13 @@ class TasksController < ApplicationController
     end
   end
 
+  def destroy
+    @task = @user.tasks.find(params[:id])
+    @task.destroy
+    flash[:_] = "⚪︎"
+    redirect_to @user
+  end
+
   private
 
     def task_collection_params

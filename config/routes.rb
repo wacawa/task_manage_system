@@ -16,7 +16,7 @@ Rails.application.routes.draw do
     member do
       post "/send_mail", to: "users#send_mail"
     end
-    resources :tasks, only: [:new, :create, :update]
+    resources :tasks, only: [:new, :create, :update, :destroy]
   end
 
 end

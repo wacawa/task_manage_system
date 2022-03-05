@@ -24,7 +24,8 @@
     <% if @edit_task.present? && task.id == @edit_task.id %>
       <div class="task <%= cname1 %> <%= cname2 %> task-form overflow">
         <%= form_with(model: task, url: user_task_path(@user, task), local: true) do |f| %>
-            <%= f.text_field :title, class: "form-control text-secondary" %>
+          <%= link_to "削除", user_task_path(@user, task.id), class: "btn btn-light btn-outline-secondary", method: :delete %>
+          <%= f.text_field :title, class: "form-control text-secondary" %>
           <div class="row g-2 align-items-center">
             <div class="col-auto">
               <%= f.time_field :start_time, class: "form-control text-secondary" %>
