@@ -42,5 +42,6 @@ yarn-debug.log*
 
 /config/credentials/development.key
 /config/environments/development.rb
+/config/environments/production.rb
 .env
 /app/controllers/sessions_controller.rb
