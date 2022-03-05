@@ -10,9 +10,8 @@ class SessionsController < ApplicationController
     user = User.from_omniauth(login_user, request.env["omniauth.auth"])
     id = 1 unless User.exists?
     id = User.exists? ? User.last.id + 1 : 1
-    password = SecureRandom.urlsafe_base64
-    user.password = password if user.id.present?
     user.id ||= id
+    user.password ||= password
     if user.save
       if login_user && login_user != user
         if login_user.tasks.exists?
@@ -78,8 +77,8 @@ class SessionsController < ApplicationController
         user = User.line_omniauth(login_user, res_body)
         id = User.exists? ? User.last.id + 1 : 1
         password = SecureRandom.urlsafe_base64
-        user.password = password if user.id.present?
         user.id ||= id
+        user.password ||= password
         if user.save
           if login_user && login_user != user
             if login_user.tasks.exists?
