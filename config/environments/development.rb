@@ -41,7 +41,6 @@ Rails.application.configure do
     user_name:            ENV["GMAIL_ID"],
     password:             ENV["GMAIL_PASS"],
     authentication:       'login',
-    enable_starttls_auto: true
   }
 
   config.action_mailer.perform_caching = false

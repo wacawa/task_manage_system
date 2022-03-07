@@ -125,6 +125,7 @@ class UsersController < ApplicationController
           @time = hour ? time.change(hour: hour) : time
         end
         @time = @time.yesterday if @time > Time.now.beginning_of_hour
+        session[:default_time] = {year: @time.year, month: @time.month, day: @time.day, hour: @time.hour}
       # @without_task = true if @task.blank?
       end
       @tasks = @user.tasks.where(start_datetime: @time).order(:start_time)
