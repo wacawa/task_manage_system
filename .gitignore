@@ -40,7 +40,4 @@
 yarn-debug.log*
 .yarn-integrity
 
-/config/credentials/development.key
-/config/environments/development.rb
 .env
-/app/controllers/sessions_controller.rb

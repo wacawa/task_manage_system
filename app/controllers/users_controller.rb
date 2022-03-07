@@ -90,6 +90,11 @@ class UsersController < ApplicationController
       end
     end
 
+    def create_time_gest
+      if @user.provider.blank?
+      end
+    end
+
     def create_tasks
       if @user.provider.blank?
         user_ex_date(@user)
@@ -118,10 +123,9 @@ class UsersController < ApplicationController
         elsif !params[:prev]
           time = Time.now.beginning_of_hour
           @time = hour ? time.change(hour: hour) : time
-          @time = @time.yesterday if @time > Time.now.beginning_of_hour
-          session[:default_time] = {year: @time.year, month: @time.month, day: @time.day, hour: @time.hour} if session[:default_time].empty?
         end
-        # @without_task = true if @task.blank?
+        @time = @time.yesterday if @time > Time.now.beginning_of_hour
+      # @without_task = true if @task.blank?
       end
       @tasks = @user.tasks.where(start_datetime: @time).order(:start_time)
     end

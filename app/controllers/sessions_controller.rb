@@ -112,6 +112,7 @@ class SessionsController < ApplicationController
   def destroy
     user = login_user
     if user.provider.nil?
+      user.expiration_date = nil
       user.tasks.destroy_all
       msg = "退出しました。"
     else
