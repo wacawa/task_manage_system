@@ -3,9 +3,11 @@ class UsersController < ApplicationController
   before_action :logged_in_user, only: :show
   before_action :correct_user, only: :show
   before_action :session_update, only: :show
-  before_action :create_tasks, only: :show
+  before_action :create_time_gest, only: :show
+  before_action :create_time_provider, only: :show
 
   def show
+    @tasks = @user.tasks.where(start_datetime: @time).order(:start_time)
     @tasks ||= []
     @within = @time <= Time.now && Time.now < @time.tomorrow
     @year = @time.year
@@ -92,15 +94,10 @@ class UsersController < ApplicationController
 
     def create_time_gest
       if @user.provider.blank?
-      end
-    end
-
-    def create_tasks
-      if @user.provider.blank?
         user_ex_date(@user)
         if @boolean && @ex_date < DateTime.now
           logout
-          flash[:outsession] = "お疲れ様でした♪"
+          flash[:_] = "お疲れ様でした♪"
           redirect_to root_url
         elsif !@boolean
           password = SecureRandom.urlsafe_base64
@@ -110,25 +107,24 @@ class UsersController < ApplicationController
         else
           hash = session[:default_time].empty? ? {} : session[:default_time]
           time = hash.empty? ? false : "#{hash["year"]}-#{hash["month"]}-#{hash["day"]} #{hash["hour"]}:00:00".to_time
-          @time = "#{params[:year]}-#{params[:month]}-#{params[:day]} #{params[:hour]}:00:00".to_time if params[:year]
+          @time = "#{params[:year]}-#{params[:month]}-#{params[:day]} #{params[:hour]}:00:00".to_time if !time && params[:year]
           time ||= @user.tasks.exists? ? @user.tasks.first.start_datetime : false
           @time ||= time ? time : @user.expiration_date.yesterday.beginning_of_hour
         end
-      else
-        @time = "#{params[:year]}-#{params[:month]}-#{params[:day]} #{params[:hour]}:00:00".to_time if params[:prev] || params[:next]
-        hour = @user.tasks.exists? ? @user.tasks.order(:start_datetime).last.start_datetime.hour : false
-        if params[:next]
-          task = @user.tasks.where(start_datetime: @time).last.present?
-          @time = Time.now.beginning_of_hour.change(hour: hour) if !task && hour
-        elsif !params[:prev]
-          time = Time.now.beginning_of_hour
-          @time = hour ? time.change(hour: hour) : time
-        end
-        @time = @time.yesterday if @time > Time.now.beginning_of_hour
-        session[:default_time] = {year: @time.year, month: @time.month, day: @time.day, hour: @time.hour}
-      # @without_task = true if @task.blank?
       end
-      @tasks = @user.tasks.where(start_datetime: @time).order(:start_time)
+    end
+
+    def create_time_provider
+      if @user.provider.present?
+        @time = "#{params[:year]}-#{params[:month]}-#{params[:day]} #{params[:hour]}:00:00".to_time if params[:prev] || params[:next]
+        unless @time
+          hour = @user.tasks.exists? ? @user.tasks.order(:start_datetime).last.start_datetime.hour : false
+          now = Time.now.beginning_of_hour
+          time = hour ? time.change(hour: hour) : now
+          @time = time > now ? time.yesterday : time
+          session[:default_time] = {year: @time.year, month: @time.month, day: @time.day, hour: @time.hour}
+        end
+      end
     end
 
   # methods
