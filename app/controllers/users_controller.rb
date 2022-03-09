@@ -120,7 +120,7 @@ class UsersController < ApplicationController
         unless @time
           hour = @user.tasks.exists? ? @user.tasks.order(:start_datetime).last.start_datetime.hour : false
           now = Time.now.beginning_of_hour
-          time = hour ? time.change(hour: hour) : now
+          time = hour ? now.change(hour: hour) : now
           @time = time > now ? time.yesterday : time
           session[:default_time] = {year: @time.year, month: @time.month, day: @time.day, hour: @time.hour}
         end
