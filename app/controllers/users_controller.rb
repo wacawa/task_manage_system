@@ -95,6 +95,7 @@ class UsersController < ApplicationController
     def create_time_gest
       if @user.provider.blank?
         user_ex_date(@user)
+        debugger
         if @boolean && @ex_date < DateTime.now
           logout
           flash[:_] = "お疲れ様でした♪"

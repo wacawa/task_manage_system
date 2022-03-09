@@ -6,7 +6,7 @@
 <% if @tasks.present? %>
   <% dates = [] %>
   <% @tasks.each do |task| %>
-    <% date = "#{task.start_time.month} / #{task.start_time.day}" %>
+    <% date = "#{task.start_time.month} / #{task.start_time.day} (#{@wday[task.start_time.wday]})" %>
     <% stime = "#{"%02d" % task.start_time.hour} : #{"%02d" % task.start_time.min}" %>
     <% ftime = "#{"%02d" % task.finish_time.hour} : #{"%02d" % task.finish_time.min}" %>
 
