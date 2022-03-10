@@ -43,7 +43,7 @@ Rails.application.configure do
     password:             ENV["GMAIL_PASS"],
     authentication:       :login,
   }
-  config.action_mailer.default_options = {from: 'no-reply@example.com'}
+  config.action_mailer.default_options = {from: 'timeboxingportfolio@gmail.com'}
 
   config.action_mailer.perform_caching = false
 
