@@ -215,8 +215,12 @@ function scroll(){
 function set_task(){
   var i = 0;
   $(".task").each(function(){
+    // $(".task-delete").each(function(){
+      var task = $(this);
+      var btn = $(this).parent().prev(".badge");
+      // var task = $(this).find("div.task");
       var navbar = $(".navbar").height();
-      var cname_array = $(this).attr("class").split(" ");
+      var cname_array = task.attr("class").split(" ");
       var cname = cname_array[1].substr(5)
       var range = cname_array[2].substr(6)
       var div_height = $(":root").css("--time-div-height").slice(0, -2)
@@ -246,12 +250,13 @@ function set_task(){
       //     $("."+cname).css("height", changedivheight)
       //   }
       }else{
-      range = range * div_height// - div_height / 2;
+        range = range * div_height// - div_height / 2;
       }
       var top = Math.floor($("."+cname).offset().top) - navbar - div_height * 1.4;
       $(this).css("top", top);
       $(this).css("height", range);
       $(this).css("z-index", i);
+      btn.css("top", top)
       i += 1
   })
 }

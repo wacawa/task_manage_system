@@ -21,10 +21,15 @@
     <% cname2 = "range_#{range}" %>
     <% fhour = "%02d" % ft.hour %>
     <% fmin = "%02d" % ft.min %>
+    <div class="badge">
+      <%= link_to user_task_path(@user, task.id), method: :delete do %>
+        <span class="delete-btn"></span>
+      <% end %>
+    </div>
     <% if @edit_task.present? && task.id == @edit_task.id %>
-      <div class="task <%= cname1 %> <%= cname2 %> task-form overflow">
-        <%= form_with(model: task, url: user_task_path(@user, task), local: true) do |f| %>
-          <%= link_to "削除", user_task_path(@user, task.id), class: "btn btn-light btn-outline-secondary", method: :delete %>
+      <%= form_with(model: task, url: user_task_path(@user, task), local: true) do |f| %>
+        <div class="task <%= cname1 %> <%= cname2 %> task-form overflow">
+          <%# link_to "削除", user_task_path(@user, task.id), class: "btn btn-light btn-outline-secondary", method: :delete %>
           <%= f.text_field :title, class: "form-control text-secondary" %>
           <div class="row g-2 align-items-center">
             <div class="col-auto">
@@ -41,8 +46,8 @@
             <%= f.hidden_field :start_datetime %>
             <%= f.submit "送信", class: "btn btn-light btn-outline-secondary" %>
             <%= link_to "キャンセル", user_path(request.query_parameters.except(:task_id)), class: "btn btn-light btn-outline-secondary" %>
-        <% end %>
-      </div>
+        </div>
+      <% end %>
     <% else %>
       <%= link_to user_path(year: params[:year], month: params[:month], day: params[:day], hour: params[:hour], task_id: task.id) do %>
         <div class="task <%= cname1 %> <%= cname2 %> <%= overflow %>">
@@ -53,7 +58,7 @@
           </div>
         </div>
       <% end %>
-    <% end %>
+     <% end %>
   <% end %>
 
   <div class="row">
@@ -74,7 +79,7 @@
               <div class="<%= dhm %> <%= cname %>"><%= "#{h.to_i} : #{m}" if m == "00" %></div>
             <% end %>
           <% else %>
-            <div class="<%= d+h %>00 hour"><%= "#{h.to_i} : 00" %></div>
+            <div class="dhm_<%= d+h %>00 hour"><%= "#{h.to_i} : 00" %></div>
           <% end %>
         <% end %>
       </div>
