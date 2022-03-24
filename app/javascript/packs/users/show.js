@@ -256,7 +256,10 @@ function set_task(){
       $(this).css("top", top);
       $(this).css("height", range);
       $(this).css("z-index", i);
-      btn.css("top", top)
+      $(".task-form").css("z-index", 10)
+      var bottom = top + range
+      var btn_top = bottom - btn.innerHeight() * 0.9
+      btn.css("top", btn_top);
       i += 1
   })
 }

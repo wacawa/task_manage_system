@@ -41,13 +41,11 @@
   border: white solid 1px;
   border-radius: 50px;
   padding: 20px 0;
-  z-index: 1;
 }
 
 div.badge {
   position: absolute;
-  left: 71%;
-  z-index: 2;
+  left: 73%;
   // border: white solid;
   border-radius: 50%;
   height: 55px;
@@ -55,6 +53,8 @@ div.badge {
   display: flex;
   justify-content: center;
   align-items: center;
+  background-color: #6c757d;
+  z-index: 20;
 }
 
 .delete-btn {
@@ -66,6 +66,7 @@ div.badge {
   border-radius: 50%;
   color: white;
   font-size: x-large;
+  background-color: #6c757d;
   &:hover:before, &:hover:after {
     background: #6c757d;
   }
@@ -97,7 +98,7 @@ div.badge {
 
 .task-form {
   padding: 20px;
-  z-index: 100;
+  z-index: 10;
 }
 
 .overflow {
