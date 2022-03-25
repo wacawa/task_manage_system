@@ -9,6 +9,13 @@ class UsersController < ApplicationController
   def show
     @tasks = @user.tasks.where(start_datetime: @time).order(:start_time)
     @tasks ||= []
+
+    
+    start_times = @tasks.pluck(:start_time) if @tasks.present?
+    @overlap_start = start_times.select{|s| start_times.index(s) != start_times.rindex(s)}.uniq if start_times.present?
+
+
+
     @within = @time <= Time.now && Time.now < @time.tomorrow
     @year = @time.year
     @month = @time.month
