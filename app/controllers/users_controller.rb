@@ -4,15 +4,15 @@ class UsersController < ApplicationController
   before_action :correct_user, only: :show
   before_action :session_update, only: :show
   before_action :create_time_gest, only: :show
-  before_action :create_time_provider, only: :show
 
   def show
     @tasks = @user.tasks.where(start_datetime: @time).order(:start_time)
     @tasks ||= []
+    @ids = @tasks.pluck(:id).join("-")
 
-    
-    start_times = @tasks.pluck(:start_time) if @tasks.present?
-    @overlap_start = start_times.select{|s| start_times.index(s) != start_times.rindex(s)}.uniq if start_times.present?
+
+    # start_times = @tasks.pluck(:start_time) if @tasks.present?
+    # @overlap_start = start_times.select{|s| start_times.index(s) != start_times.rindex(s)}.uniq if start_times.present?
 
 
 
@@ -31,7 +31,10 @@ class UsersController < ApplicationController
   end
 
   def destroy
-    @user.destroy
+    if logged_in?
+      @login_user.destroy 
+      logout
+    end
     flash[:destroy] = "退出しました。"
     redirect_to root_url
   end
@@ -41,27 +44,23 @@ class UsersController < ApplicationController
 
   def update
     if @user.update_attributes(user_params)
-      flash[:user_update] = "⚪︎"
-      redirect_to create_user_url(@user)
+      flash[:_] = "⚪︎"
+      redirect_to @user
     else
       # flash.now[:user_unupdate] = "×"
-      flash[:user_unupdate] = "×"
+      flash[:_] = "×"
       # redirect_back fallback_location: session[:default_url]
       # render :show
-      redirect_to create_user_url(@user)
+      redirect_to @user
     end
   end
 
   def send_mail
-    time_hash = session[:default_time].present? ? session[:default_time] : time_hash(params[:year], params[:month], params[:day], params[:hour])
-    t = session[:default_time].map{|k,v| v}
-    # time = "#{params[:year]}-#{params[:month]}-#{params[:day]} #{params[:hour]}:00:00".to_time
-    time = "#{t[0]}-#{t[1]}-#{t[2]} #{t[3]}:00:00".to_time
-    tasks = @user.tasks.where(start_datetime: time)
-    @tasks = tasks.where("finish_time > ?", Time.now).order(:start_time)
+    time = time_hash(params[:year], params[:month], params[:day], params[:hour]).tomorrow
+    @tasks = @user.tasks.where("finish_time > ?", Time.now).where("finish_time < ?", time)
     TaskMailer.send_tasks(@user, @tasks).deliver_now
     flash[:mail] = "送信しました。"
-    redirect_to create_user_url(@user)
+    redirect_to @user
   end
 
   private
@@ -84,7 +83,7 @@ class UsersController < ApplicationController
         # t = Time.now
         # url = user_url(login_user, year: t.year, month: t.month, day: t.day, hour: t.hour)
         flash[:uncorrect] = "×"
-        redirect_to create_user_url(login_user) 
+        redirect_to user_url(login_user) 
       end
     end
 
@@ -101,44 +100,27 @@ class UsersController < ApplicationController
 
     def create_time_gest
       if @user.provider.blank?
-        user_ex_date(@user)
-        debugger
-        if @boolean && @ex_date < DateTime.now
+        limit = @user.expiration_date
+        if limit < Time.now
           logout
           flash[:_] = "お疲れ様でした♪"
           redirect_to root_url
-        elsif !@boolean
-          password = SecureRandom.urlsafe_base64
-          @time = Time.now.beginning_of_hour.tomorrow
-          @user.update(expiration_date: @time, password: password, password_confirmation: password)
-          @time = @time.yesterday
-        else
-          hash = session[:default_time].empty? ? {} : session[:default_time]
-          time = hash.empty? ? false : "#{hash["year"]}-#{hash["month"]}-#{hash["day"]} #{hash["hour"]}:00:00".to_time
-          @time = "#{params[:year]}-#{params[:month]}-#{params[:day]} #{params[:hour]}:00:00".to_time if !time && params[:year]
-          time ||= @user.tasks.exists? ? @user.tasks.first.start_datetime : false
-          @time ||= time ? time : @user.expiration_date.yesterday.beginning_of_hour
         end
-      end
-    end
-
-    def create_time_provider
-      if @user.provider.present?
+      else
         @time = "#{params[:year]}-#{params[:month]}-#{params[:day]} #{params[:hour]}:00:00".to_time if params[:prev] || params[:next]
-        unless @time
-          hour = @user.tasks.exists? ? @user.tasks.order(:start_datetime).last.start_datetime.hour : false
-          now = Time.now.beginning_of_hour
-          time = hour ? now.change(hour: hour) : now
-          @time = time > now ? time.yesterday : time
-          session[:default_time] = {year: @time.year, month: @time.month, day: @time.day, hour: @time.hour}
-        end
+        @time ||= session_to_time
       end
     end
 
-  # methods
+    # methods
 
-    def time_hash(year, month, day, hour)
-      return {year: year, month: month, day: day, hour: hour}
-    end
+      def time_hash(year, month, day, hour)
+        return "#{year}-#{month}-#{day} #{hour}:00:00".to_time
+      end
     
+      def session_to_time
+        hash = session[:default_time]
+        return "#{hash["year"]}-#{hash["month"]}-#{hash["day"]} #{hash["hour"]}:00:00".to_time
+      end
+
 end

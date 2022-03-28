@@ -111,9 +111,8 @@
   <% if @within %>
     <% if @user.provider && @user.email.present? %>
       <div class="mail">
-        <% time_hash = {year: @time.year, month: @time.month, day: @time.day, hour: @time.hour} %>
         <%= link_to send_mail_user_path(@user,
-         year: @time.year, month: @time.month, day: @time.day, hour: @time.hour),
+          year: @time.year, month: @time.month, day: @time.day, hour: @time.hour),
           method: :post do %><%# , data: {confirm: "ご登録のアドレス宛にタスクを送信します。"} %>
           <%= image_tag("mail.png") %>
         <% end %>

@@ -1,14 +1,16 @@
 class StaticPagesController < ApplicationController
-  before_action :not_access, only: :top
+  before_action :not_access, except: :intro
   
   def top
   end
 
   def gest_login
-    user = get_user
+    user = User.new
+    user.id = User.exists? ? ([*1..User.count] - User.pluck(:id)).first : 1
+    user.id ||= User.last.id + 1
     user.email = "gest#{format("%02d", user.id)}@email.com"
     user.password = SecureRandom.urlsafe_base64
-    user.expiration_date = DateTime.now.beginning_of_hour.since(1.day + 2.hours)
+    user.expiration_date = Time.now.tomorrow.beginning_of_hour
     if user.save
       redirect_user(user, "タスクを作成しましょう♪")
     end
@@ -21,28 +23,10 @@ class StaticPagesController < ApplicationController
   #before_action
     
     def not_access
-      if login_user.present?
+      if logged_in?
         flash[:_] = "×"
-        # redirect_back fallback_location: @login_user
-        redirect_to create_user_url(login_user)
-        # redirect_to request.referer
+        redirect_to user_url(login_user)
       end
     end
-
-
-  #methods
-
-    def get_user
-      user = User.where(provider: nil).where.not(expiration_date: nil).order(:expiration_date).first
-      user_ex_date(user)
-      if @boolean && @ex_date < DateTime.now
-        id = user.id
-        user.destroy
-      end
-      id = 1 unless User.exists?
-      id ||= User.last.id + 1
-      return User.new(id: id)
-    end
-
 
 end

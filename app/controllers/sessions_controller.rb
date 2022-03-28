@@ -8,8 +8,8 @@ class SessionsController < ApplicationController
   def create
     password = SecureRandom.urlsafe_base64
     user = User.from_omniauth(login_user, request.env["omniauth.auth"])
-    id = 1 unless User.exists?
-    id = User.exists? ? User.last.id + 1 : 1
+    id = User.exists? ? ([*1..User.count] - User.pluck(:id)).first : 1
+    id ||= User.last.id + 1
     user.id ||= id
     user.password ||= password
     if user.save
@@ -75,7 +75,8 @@ class SessionsController < ApplicationController
         res_body["a_token"] = a_token
         res_body["provider"] = "line"
         user = User.line_omniauth(login_user, res_body)
-        id = User.exists? ? User.last.id + 1 : 1
+        id = User.exists? ? ([*1..User.count] - User.pluck(:id)).first : 1
+        id ||= User.last.id + 1
         password = SecureRandom.urlsafe_base64
         user.id ||= id
         user.password ||= password
@@ -110,16 +111,8 @@ class SessionsController < ApplicationController
   end
 
   def destroy
-    user = login_user
-    if user.provider.nil?
-      user.expiration_date = nil
-      user.tasks.destroy_all
-      msg = "退出しました。"
-    else
-      msg = "ログアウトしました。"
-    end
     logout if logged_in?
-    flash[:_] = msg
+    flash[:_] = "ログアウトしました。"
     redirect_to root_url
   end
 

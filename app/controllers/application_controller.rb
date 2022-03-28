@@ -13,32 +13,13 @@ class ApplicationController < ActionController::Base
     redirect_to root_url
   end
 
-  def create_user_url(user)
-    return user_url(user, session[:default_time])
-  end
-
-  def user_ex_date(user)
-    if user
-      @ex_date = user.expiration_date
-      @boolean = @ex_date.is_a?(Time)
-    else
-      @ex_date = nil
-      @boolean = false
-    end
-  end
-
   def redirect_user(user, text)
     login(user)
     remember(user)
-    now = DateTime.now
-    limit = user.tasks.order(:start_datetime).pluck(:start_datetime).last
-    if limit && limit.tomorrow > now
-      now = limit
-    end
+    now = Time.now
     session[:default_time] = {year: now.year, month: now.month, day: now.day, hour: now.hour}
     flash[:_] = text
-    redirect_to user_url(user, session[:default_time])
+    redirect_to user_url(user)
   end
-
 
 end

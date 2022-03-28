@@ -6,10 +6,7 @@ module SessionsHelper
 
   def remember(user)
     user.remember
-    user_ex_date(user)
-    # cookies.signed[:user_id] = {value: user.id, expires: 1.day.from_now}
-    # cookies[:remember_token] = {value: user.remember_token, expires: 1.day.from_now}
-    if @boolean
+    if user.expiration_date.present?
       cookies.signed[:user_id] = {value: user.id, expires: @ex_date}
       cookies[:remember_token] = {value: user.remember_token, expires: @ex_date}
     else

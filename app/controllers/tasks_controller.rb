@@ -21,12 +21,12 @@ class TasksController < ApplicationController
     if @form.save
       flash[:_] = "⚪︎"
       # redirect_to request.referer
-      redirect_to create_user_url(@user)
+      redirect_to user_url(@user)
     else
       flash[:_] = @form.valid?.include?(true) ? "一部のタスクの作成に失敗しました" : "×"
       # render "users/show", day: params[:day], hour: params[:hour]
       # redirect_back(fallback_location: session[:default_url])
-      redirect_to create_user_url(@user)
+      redirect_to user_url(@user)
       # render "users/show"
     end
   end
@@ -52,7 +52,7 @@ class TasksController < ApplicationController
       @task.memo = @task.memo.gsub(/(\r\n)*$/, "") if @task.memo.present?
       flash[:_] = "⚪︎"
       # redirect_to session[:default_url]
-      redirect_to create_user_url(@user)
+      redirect_to user_url(@user)
     else
       flash.now[:_] = "×"
       # redirect_back(fallback_location: request.referer)
