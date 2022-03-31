@@ -60,7 +60,7 @@ class Form::TaskCollection < Form::Base
   end
 
   def target_tasks
-    self.tasks.select { |v| v.title.present? }
+    self.tasks.select { |v| v.finish_time.present? }
   end
 
   def valid?

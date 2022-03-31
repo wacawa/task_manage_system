@@ -3,18 +3,13 @@ class UsersController < ApplicationController
   before_action :logged_in_user, only: :show
   before_action :correct_user, only: :show
   before_action :session_update, only: :show
-  before_action :create_time_gest, only: :show
+  before_action :create_time, only: [:show, :prev_time, :next_time]
+  before_action :prev_time, only: :show
+  before_action :next_time, only: :show
 
   def show
-    @tasks = @user.tasks.where(start_datetime: @time).order(:start_time)
-    @tasks ||= []
-    @ids = @tasks.pluck(:id).join("-")
-
-
     # start_times = @tasks.pluck(:start_time) if @tasks.present?
     # @overlap_start = start_times.select{|s| start_times.index(s) != start_times.rindex(s)}.uniq if start_times.present?
-
-
 
     @within = @time <= Time.now && Time.now < @time.tomorrow
     @year = @time.year
@@ -23,11 +18,6 @@ class UsersController < ApplicationController
     @hour = @time.hour
     @end_hour = @hour + 24
     @edit_task = @user.tasks.find(params[:task_id]) if params[:task_id]
-    @prev = @user.tasks.where("start_datetime < ?", @time).order(:start_datetime).last
-    @next = @user.tasks.where("start_datetime > ?", @time).order(:start_datetime).first
-    @next_time = @next.start_datetime if @next.present?
-    time = (session[:default_time].map{|_,v|v}.join("-") + ":00:00").to_time
-    @next_time ||= time if time.is_a?(Time) && @time < time
   end
 
   def destroy
@@ -56,7 +46,7 @@ class UsersController < ApplicationController
   end
 
   def send_mail
-    time = time_hash(params[:year], params[:month], params[:day], params[:hour]).tomorrow
+    time = (params[:ymd] + " " + params[:hour]).to_time.tomorrow
     @tasks = @user.tasks.where("finish_time > ?", Time.now).where("finish_time < ?", time)
     TaskMailer.send_tasks(@user, @tasks).deliver_now
     flash[:mail] = "送信しました。"
@@ -98,7 +88,7 @@ class UsersController < ApplicationController
       end
     end
 
-    def create_time_gest
+    def create_time
       if @user.provider.blank?
         limit = @user.expiration_date
         if limit < Time.now
@@ -106,10 +96,37 @@ class UsersController < ApplicationController
           flash[:_] = "お疲れ様でした♪"
           redirect_to root_url
         end
-      else
-        @time = "#{params[:year]}-#{params[:month]}-#{params[:day]} #{params[:hour]}:00:00".to_time if params[:prev] || params[:next]
-        @time ||= session_to_time
       end
+      @time = "#{params[:year]}-#{params[:month]}-#{params[:day]} #{params[:hour]}:00:00".to_time if params[:prev] || params[:next]
+      @time ||= session_to_time
+      @tasks = @user.tasks.where("finish_time > ?", @time).where("finish_time <= ?", @time.tomorrow).order(:start_time)
+      time = @tasks.exists? ? @tasks.first.start_time : @time
+      if time < @time
+        @time = @tasks.first.start_time.beginning_of_hour
+        session[:default_time] = {year: @time.year, month: @time.month, day: @time.day, hour: @time.hour}
+      end
+    end
+
+    def prev_time
+      prev_time = @user.tasks.where("start_datetime < ?", @time).order(:start_datetime).pluck(:start_datetime).uniq.last
+      if prev_time && prev_time >= @time.yesterday
+        time = @time.yesterday
+      else
+        time = prev_time ? @user.tasks.where(start_datetime: prev_time).order(:finish_time).last.finish_time.yesterday : nil
+      end
+      @prev_time = time
+    end
+
+    def next_time
+      next_time = @user.tasks.where("start_time >= ?", @time.tomorrow).order(:start_time).pluck(:start_time).uniq.first
+      if next_time && next_time < @time.since(2.days)
+        time = @time.tomorrow
+      else
+        time = next_time
+        session_time = (session[:default_time].map{|_,v|v}.join("-") + ":00:00").to_time
+        time = session_time if time && time > session_time
+      end
+      @next_time = time
     end
 
     # methods

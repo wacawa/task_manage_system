@@ -58,18 +58,18 @@
               <div class="btn btn-outline-secondary back-btn">閉じる</div>
             </div>
           <% end %>
-          <% if @tasks.present? %>
+          <% if tasks = @tasks.where("finish_time > ?", Time.now).presence %>
             <br>
             <table class="table table-bordered border-secondary align-middle center-middle">
               <tbody class="secondary">
-                <tr><td colspan="4">↓ 追加済みの予定 ↓</td></tr>
+                <tr><td colspan="4">↓ この後の予定 ↓</td></tr>
                 <tr>
                   <th><%= Task.human_attribute_name(:start_time) %></th>
                   <th><%= Task.human_attribute_name(:finish_time) %></th>
                   <th><%= Task.human_attribute_name(:title) %></th>
                   <th><%= Task.human_attribute_name(:memo) %></th>
                 </tr>
-                <% @tasks.each do |t| %>
+                <% tasks.each do |t| %>
                   <tr>
                     <td><%= l(t.start_time, format: :time) %></td>
                     <td><%= l(t.finish_time, format: :time) %></td>
