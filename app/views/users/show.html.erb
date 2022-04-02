@@ -22,12 +22,12 @@
     <% fhour = "%02d" % ft.hour %>
     <% fmin = "%02d" % ft.min %>
     <div class="badge">
-      <%= link_to user_task_path(@user, task.id, ymd: l(@time, format: :ymd), hour: @time.hour), method: :delete do %>
+      <%= link_to user_task_path(@user, task.id, ymd: l(@time, format: :hyphen)), method: :delete do %>
         <span class="delete-btn"></span>
       <% end %>
     </div>
     <% if @edit_task.present? && task.id == @edit_task.id %>
-      <%= form_with(model: task, url: user_task_path(@user, task, ymd: l(@time, format: :ymd), hour: @time.hour), local: true) do |f| %>
+      <%= form_with(model: task, url: user_task_path(@user, task, ymd: l(@time, format: :hyphen)), local: true) do |f| %>
         <div class="task <%= cname1 %> <%= cname2 %> task-form overflow">
           <%# link_to "削除", user_task_path(@user, task.id), class: "btn btn-light btn-outline-secondary", method: :delete %>
           <%= f.text_field :title, class: "form-control text-secondary" %>
@@ -118,6 +118,8 @@
         <% end %>
       </div>
     <% end %>
+  <% end %>
+  <% if @within || @over %>
     <div class="addtask">
       <%= link_to new_user_task_path(@user, ymd: l(@time, format: :ymd), day: @day[0], hour: @hour), remote: true do %> 
         <canvas id="plus" width="100" height="100"></canvas>

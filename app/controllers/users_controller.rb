@@ -12,6 +12,7 @@ class UsersController < ApplicationController
     # @overlap_start = start_times.select{|s| start_times.index(s) != start_times.rindex(s)}.uniq if start_times.present?
 
     @within = @time <= Time.now && Time.now < @time.tomorrow
+    @over = Time.now.tomorrow < @time.tomorrow
     @year = @time.year
     @month = @time.month
     @day = [@time.day, @time.tomorrow.day]
@@ -21,11 +22,10 @@ class UsersController < ApplicationController
   end
 
   def destroy
-    if logged_in?
-      @login_user.destroy 
-      logout
-    end
-    flash[:destroy] = "退出しました。"
+    user = login_user
+    logout
+    user.destroy
+    flash[:destroy] = "ありがとうございました。"
     redirect_to root_url
   end
 
@@ -128,7 +128,8 @@ class UsersController < ApplicationController
       else
         time = next_time && next_time < session_to_time ? next_time : session_to_time
       end
-      @next_time = @time >= session_to_time ? nil : time
+      @next_time = @time >= session_to_time.tomorrow ? nil : time
+      @next_time = session_to_time.tomorrow if session_to_time <= @time && @time < session_to_time.tomorrow
     end
 
     # methods
