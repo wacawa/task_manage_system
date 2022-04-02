@@ -1,6 +1,6 @@
 class SessionsController < ApplicationController
   def new
-    @email = params[:email].gsub(/%40/, "@") unless params[:email].nil?
+    @email = params[:email].gsub(/%40/, "@").gsub(/%2B/, "+") unless params[:email].nil?
     @login_error = params[:error]
     @line_state = SecureRandom.urlsafe_base64
   end

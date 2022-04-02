@@ -30,18 +30,21 @@ class UsersController < ApplicationController
   end
 
   def edit
+    @time = time_hash(params[:year], params[:month], params[:day], params[:hour])
   end
 
   def update
+    @time = time_hash(params[:year], params[:month], params[:day], params[:hour])
     if @user.update_attributes(user_params)
       flash[:_] = "⚪︎"
-      redirect_to @user
+      redirect_to user_url(@user, year: @time.year, month: @time.month, day: @time.day, hour: @time.hour, update: true)
     else
       # flash.now[:user_unupdate] = "×"
       flash[:_] = "×"
       # redirect_back fallback_location: session[:default_url]
       # render :show
-      redirect_to @user
+      redirect_to user_url(@user, year: @time.year, month: @time.month, day: @time.day, hour: @time.hour, update: true)
+      # redirect_to @user
     end
   end
 
@@ -97,7 +100,7 @@ class UsersController < ApplicationController
           redirect_to root_url
         end
       end
-      @time = "#{params[:year]}-#{params[:month]}-#{params[:day]} #{params[:hour]}:00:00".to_time if params[:prev] || params[:next]
+      @time = "#{params[:year]}-#{params[:month]}-#{params[:day]} #{params[:hour]}:00:00".to_time if params[:prev] || params[:next] || params[:task_id] || params[:update]
       @time ||= session_to_time
       @tasks = @user.tasks.where("finish_time > ?", @time).where("finish_time <= ?", @time.tomorrow).order(:start_time)
       time = @tasks.exists? ? @tasks.first.start_time : @time
@@ -113,6 +116,7 @@ class UsersController < ApplicationController
         time = @time.yesterday
       else
         time = prev_time ? @user.tasks.where(start_datetime: prev_time).order(:finish_time).last.finish_time.yesterday : nil
+        time = time.beginning_of_hour.since(1.hour) if time && time.beginning_of_hour != time
       end
       @prev_time = time
     end
@@ -122,11 +126,9 @@ class UsersController < ApplicationController
       if next_time && next_time < @time.since(2.days)
         time = @time.tomorrow
       else
-        time = next_time
-        session_time = (session[:default_time].map{|_,v|v}.join("-") + ":00:00").to_time
-        time = session_time if time && time > session_time
+        time = next_time && next_time < session_to_time ? next_time : session_to_time
       end
-      @next_time = time
+      @next_time = @time >= session_to_time ? nil : time
     end
 
     # methods

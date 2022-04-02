@@ -207,7 +207,9 @@ function scroll(){
         $(window).scrollTop(nowtop[0]);
       }
     }else{
-      $(window).scrollTop(0);
+      var navbar = $(".navbar").height();
+      var top = Math.floor($(".task").offset().top) - navbar * 2
+      $(window).scrollTop(top);
     }
   }
 }
@@ -265,7 +267,7 @@ function set_task(){
 }
 
 $(function(){
-  today();
+  today(false);
   draw();
   set_task();
   scroll();
@@ -296,27 +298,34 @@ function draw() {
   }
 }
 
-function today() {
+function today(zero) {
   var canvas = document.getElementById('today');
-  var time = $(".today-view").attr("class").split(" ")[1].split("-")
+  if(zero){
+    var time = $(".today-view").attr("class").split(" ")[2].split("-")
+  }else{
+    var time = $(".today-view").attr("class").split(" ")[1].split("-")
+  }
   if (canvas.getContext) {
     var ctx = canvas.getContext('2d');
 
     var x = canvas.height;
     var y = canvas.width;
 
-    ctx.beginPath();
-    ctx.strokeStyle = "#6c757d";
-    ctx.lineWidth = 3;
+    // ctx.beginPath();
+    // ctx.strokeStyle = "#6c757d";
+    // ctx.lineWidth = 3;
     roundedRect(ctx, 5, 15, 110, 70, 30);
-    ctx.closePath();
+    // ctx.closePath();
     date = time[0] + "/" + time[1] + "/" + time[2]
-    ctx.lineWidth = 1;
-    ctx.font = "15px sans-serif";
+    ctx.font = "bold 15px sans-serif";
     ctx.textAlign = "center";
     ctx.textBaseline = "middle";
     ctx.fillStyle = "#6c757d";
-    ctx.fillText(date, 60, 50)
+    if(zero){
+      ctx.fillText(date, 60, 50)
+    }else{
+      ctx.fillText(date, 60, 50)
+    }
     // ctx.stroke();
 
     // ctx.fillStyle = "#6c757d"
@@ -327,6 +336,8 @@ function today() {
 
 function roundedRect(ctx, x, y, width, height, radius) { //角丸四角の描画
   ctx.beginPath();
+  ctx.strokeStyle = "#6c757d";
+  ctx.lineWidth = 5;
   ctx.moveTo(x, y + radius);
   ctx.lineTo(x, y + height - radius);
   ctx.arcTo(x, y + height, x + radius, y + height, radius);
@@ -337,6 +348,19 @@ function roundedRect(ctx, x, y, width, height, radius) { //角丸四角の描画
   ctx.lineTo(x + radius, y);
   ctx.arcTo(x, y, x, y + radius, radius);
   ctx.stroke();
+  ctx.fillStyle = "white";
+  ctx.fill();
 }
+
+$(window).scroll(function() {
+  var navbar = $(".navbar").height();
+  var window_top = $(this).scrollTop() + navbar * 2;
+  var tomorrow = $(".tomorrow").offset().top;
+  if(window_top > tomorrow){
+    today(true)
+  }else{
+    today(false)    
+  }
+});
 
 

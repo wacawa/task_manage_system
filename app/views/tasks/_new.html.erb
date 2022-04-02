@@ -38,7 +38,7 @@
                   </tr>
                   <% j += 1 if i % form_count == 0 %>
                   <% i += 1 %>
-                  <%= t.hidden_field :start_datetime, value: Time.now.beginning_of_hour.change(day: @day.to_i, hour: @hour.to_i) %>
+                  <%= t.hidden_field :start_datetime, value: @time %>
                   <%= t.hidden_field :user_id, value: @user.id %>
                   <%# t.hidden_field :start_date, value: 1 %>
                   <%# t.hidden_field :finish_date, value: 1 %>

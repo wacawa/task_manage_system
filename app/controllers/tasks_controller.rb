@@ -2,8 +2,7 @@ class TasksController < ApplicationController
   before_action :set_user
 
   def new
-    @day = params[:day]
-    @hour = params[:hour]
+    @time = (params[:ymd] + " " + params[:hour]).to_time
     @form = Form::TaskCollection.new
     @tasks = @user.tasks.where("start_datetime > ?", Time.now.yesterday).where("start_datetime < ?", Time.now).order(:start_time)
     if @tasks.present?
@@ -32,6 +31,7 @@ class TasksController < ApplicationController
   end
 
   def update
+    debugger
     @task = @user.tasks.find(params[:id])
     datetime = @task.start_datetime
     par = params[:task]
@@ -52,7 +52,8 @@ class TasksController < ApplicationController
       @task.memo = @task.memo.gsub(/(\r\n)*$/, "") if @task.memo.present?
       flash[:_] = "⚪︎"
       # redirect_to session[:default_url]
-      redirect_to user_url(@user)
+      t = (params[:ymd] + " " + params[:hour]).to_time
+      redirect_to user_url(@user, year: t.year, month: t.month, day: t.day, hour: params[:hour], update: true)
     else
       flash.now[:_] = "×"
       # redirect_back(fallback_location: request.referer)
@@ -65,7 +66,8 @@ class TasksController < ApplicationController
     @task = @user.tasks.find(params[:id])
     @task.destroy
     flash[:_] = "⚪︎"
-    redirect_to @user
+    t = (params[:ymd] + " " + params[:hour]).to_time
+    redirect_to user_url(@user, year: t.year, month: t.month, day: t.day, hour: params[:hour], update: true)
   end
 
   private

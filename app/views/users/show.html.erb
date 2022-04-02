@@ -22,12 +22,12 @@
     <% fhour = "%02d" % ft.hour %>
     <% fmin = "%02d" % ft.min %>
     <div class="badge">
-      <%= link_to user_task_path(@user, task.id), method: :delete do %>
+      <%= link_to user_task_path(@user, task.id, ymd: l(@time, format: :ymd), hour: @time.hour), method: :delete do %>
         <span class="delete-btn"></span>
       <% end %>
     </div>
     <% if @edit_task.present? && task.id == @edit_task.id %>
-      <%= form_with(model: task, url: user_task_path(@user, task), local: true) do |f| %>
+      <%= form_with(model: task, url: user_task_path(@user, task, ymd: l(@time, format: :ymd), hour: @time.hour), local: true) do |f| %>
         <div class="task <%= cname1 %> <%= cname2 %> task-form overflow">
           <%# link_to "削除", user_task_path(@user, task.id), class: "btn btn-light btn-outline-secondary", method: :delete %>
           <%= f.text_field :title, class: "form-control text-secondary" %>
@@ -45,11 +45,11 @@
             <%= f.text_area :memo, rows: "5", class: "form-control text-secondary", placeholder: "詳細" %>
             <%= f.hidden_field :start_datetime %>
             <%= f.submit "送信", class: "btn btn-light btn-outline-secondary" %>
-            <%= link_to "キャンセル", user_path(request.query_parameters.except(:task_id)), class: "btn btn-light btn-outline-secondary" %>
+            <%= link_to "キャンセル", user_path(year: @time.year, month: @time.month, day: @time.day, hour: @time.hour, update: true), class: "btn btn-light btn-outline-secondary" %>
         </div>
       <% end %>
     <% else %>
-      <%= link_to user_path(year: params[:year], month: params[:month], day: params[:day], hour: params[:hour], task_id: task.id) do %>
+      <%= link_to user_path(year: @time.year, month: @time.month, day: @time.day, hour: @time.hour, task_id: task.id) do %>
         <div class="task <%= cname1 %> <%= cname2 %> <%= overflow %>">
           <div class="<%= sticky %>">
             <h4 class="task-title"><%= task.title %></h4>
@@ -74,9 +74,10 @@
           <% if hour != @end_hour %>
             <% for m in 0..59 do %>
               <% cname = m == 0 ? "hour" : "" %>
+              <% tomorrow = m == 0 && h == "00" ? "tomorrow" : "" %>
               <% m = "%02d" % m %>
               <% dhm = "dhm_#{d+h+m}" %>
-              <div class="<%= dhm %> <%= cname %>"><%= "#{h.to_i} : #{m}" if m == "00" %></div>
+              <div class="<%= dhm %> <%= cname %> <%= tomorrow %>"><%= "#{h.to_i} : #{m}" if m == "00" %></div>
             <% end %>
           <% else %>
             <div class="dhm_<%= d+h %>00 hour"><%= "#{h.to_i} : 00" %></div>
@@ -85,9 +86,10 @@
       </div>
     </div>
   </div>
-  <% now = Time.now %>
-  <% cname = @within ? "#{now.year}-#{"%02d" % now.month}-#{"%02d" % now.day}" : "#{@year}-#{"%02d" % @month}-#{"%02d" % @day[0]}" %>
-  <div class="today-view <%= cname %>">
+  <% now = @time %>
+  <% cname = "#{now.year}-#{"%02d" % now.month}-#{"%02d" % now.day}" %>
+  <% next_date = "#{now.tomorrow.year}-#{"%02d" % now.tomorrow.month}-#{"%02d" % now.tomorrow.day}" %>
+  <div class="today-view <%= cname %> <%= next_date %>">
     <canvas id="today" width="120" height="100"></canvas>
   </div>
   <% if @user.provider.present? && @prev_time %>
@@ -117,7 +119,7 @@
       </div>
     <% end %>
     <div class="addtask">
-      <%= link_to new_user_task_path(@user, day: @day[0], hour: @hour), remote: true do %> 
+      <%= link_to new_user_task_path(@user, ymd: l(@time, format: :ymd), day: @day[0], hour: @hour), remote: true do %> 
         <canvas id="plus" width="100" height="100"></canvas>
       <% end %>
     </div>
