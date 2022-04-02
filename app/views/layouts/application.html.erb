@@ -25,13 +25,13 @@
           <% if logged_in? && @login_user.provider.present? %>
             <li class="nav-item">
               <%= link_to "アカウント修正",
-               edit_user_path(@login_user, year: @time.year, month: @time.month, day: @time.day, hour: @time.hour),
+               edit_user_path(@login_user, time: l(@time, format: :hyphen)),
                remote: true, class: "nav-link" %>
             </li>
             <li class="nav-item"><%= link_to "ログアウト", logout_path, method: :delete, class: "nav-link" %></li>
             <li class="nav-item"><%= link_to "現在時刻へ", user_path(@user, session[:default_time]), class: "nav-link" %></li>
           <% elsif logged_in? %>
-            <li class="nav-item"><%= link_to "アカウント登録", edit_user_path(@login_user), remote: true, class: "nav-link" %></li>
+            <li class="nav-item"><%= link_to "アカウント登録", edit_user_path(@login_user, time: l(@time, format: :hyphen)), remote: true, class: "nav-link" %></li>
             <%# <li class="nav-item"> %>
               <%# link_to "退出", user_path, method: :delete, data: {confirm: "すべての予定が削除されます。よろしいですか？"}, class: "nav-link" %>
             <%# </li> %>

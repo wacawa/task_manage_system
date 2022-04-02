@@ -15,35 +15,32 @@ class Form::TaskCollection < Form::Base
         Form::Task.new(task_attributes).tap do |val|
           val.memo = val.memo.gsub(/(\r\n)*$/, "") if val.memo.present?
           if val.start_time.is_a?(Time) && val.finish_time.is_a?(Time) && val.start_datetime.is_a?(Time)
-            val.start_time = val.start_time.beginning_of_minute
-            val.finish_time = val.finish_time.beginning_of_minute
+            date = "#{val.start_datetime.year}-#{val.start_datetime.month}-#{val.start_datetime.day}"
+            val.start_time = (date + " " + val.start_time.hour.to_s + ":" + val.start_time.min.to_s).to_time
+            val.start_time = val.start_time.tomorrow if val.start_time < val.start_datetime
+            val.finish_time = (date + " " + val.finish_time.hour.to_s + ":" + val.finish_time.min.to_s).to_time
+            val.finish_time = val.finish_time.tomorrow if val.finish_time < val.start_datetime
             range = val.finish_time - val.start_time
-            range1 = val.finish_time.tomorrow - val.start_time
-            if range.negative? && range1 >= range.abs
+            if range.zero?
               val.start_time = nil
               val.finish_time = nil
-            else
-              range = range >= 0 ? range : range1
-              d_boolean = val.start_datetime.day == Time.now.day
-              start_datetime = d_boolean ? val.start_datetime : val.start_datetime.tomorrow
-              s_boolean = val.start_time < start_datetime
-              finish_time = val.start_time + range
-              sf_boolean = s_boolean && finish_time > start_datetime
-              ds_boolean = d_boolean && s_boolean
-              z_boolean = start_datetime.hour == 0 && range.abs > range1
-              range = range.abs > range1 ? range1 : range
-              if sf_boolean || z_boolean
-                start_datetime = z_boolean ? start_datetime.tomorrow : start_datetime
-                range = finish_time - start_datetime
+            elsif range.negative? && range >= -12 * 60 * 60
+              val.start_time = nil
+              val.finish_time = nil
+            elsif range.negative?
+              val.finish_time = val.finish_time.tomorrow
+              if val.start_time < val.start_datetime.tomorrow && val.start_datetime.tomorrow < val.finish_time
+                date = val.start_datetime.tomorrow
+                finish_time = val.finish_time
+                val.finish_time = date
                 plus << Form::Task.new(task_attributes)
                 t = plus.last
-                t.start_datetime = t.start_datetime.tomorrow
-                t.start_time = t.start_datetime
-                t.finish_time = t.start_time + range
-                range = start_datetime - val.start_time
+                t.start_datetime = date
+                t.start_time = date
+                t.finish_time = finish_time
+                t.title = val.title
+                debugger
               end
-              val.start_time = ds_boolean ? val.start_time.tomorrow : val.start_time
-              val.finish_time = val.start_time + range
             end
           end
           # debugger if _ == "3"
@@ -51,6 +48,7 @@ class Form::TaskCollection < Form::Base
       # end
     end
     self.tasks.concat(plus)
+    debugger
   end
 
   def save

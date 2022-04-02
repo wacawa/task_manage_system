@@ -5,21 +5,19 @@ class TasksController < ApplicationController
     @time = (params[:ymd] + " " + params[:hour]).to_time
     @form = Form::TaskCollection.new
     @tasks = @user.tasks.where("start_datetime > ?", Time.now.yesterday).where("start_datetime < ?", Time.now).order(:start_time)
-    next_tasks = @user.tasks.where("start_datetime >= ?", Time.now).order(:start_time)
-    if @tasks.exists?
+    if params[:over] == "true"
+      if !@user.tasks.where(start_time: @time).exists?
+        @first_time = @time
+      elsif next_task = @user.tasks.where("start_time >= ?", @time).presence
+        next_tasks = @user.tasks.where("start_time >= ?", next_task.first.start_time)
+        next_array = next_tasks.pluck(:finish_time) - next_tasks.pluck(:start_time)
+        @first_time = next_array.first
+      end
+    elsif @tasks.exists?
       if task = @tasks.where("start_time < ?", Time.now).where("finish_time > ?", Time.now).presence
         tasks = @tasks.where("start_time >= ?", task.first.start_time)
         array = tasks.pluck(:finish_time) - tasks.pluck(:start_time)
         @first_time = array.first
-      end
-    end
-    if next_tasks.exists?
-      if !next_tasks.where(start_time: @time).exists?
-        @first_time = @time
-      elsif next_task = next_tasks.where("start_time > ?", @time).presence
-        next_tasks = next_tasks.where("start_time >= ?", next_task.first.start_time)
-        next_array = next_tasks.pluck(:finish_time) - next_tasks.pluck(:start_time)
-        @first_time = next_array.first
       end
     end
     @first_time ||= Time.now
@@ -61,12 +59,12 @@ class TasksController < ApplicationController
       par[:finish_time] = diff < 12 * 60 * 60 ? time : time.yesterday if par[:finish_time] == time
       par[:finish_time] = @task.start_datetime.tomorrow if datetime.tomorrow < par[:finish_time]
     end
-    t = params[:ymd].to_time
+    t = params[:time].to_time
     if @task.update_attributes(task_params)
       @task.memo = @task.memo.gsub(/(\r\n)*$/, "") if @task.memo.present?
       flash[:_] = "⚪︎"
       # redirect_to session[:default_url]
-      redirect_to user_url(@user, year: t.year, month: t.month, day: t.day, hour: params[:hour], update: true)
+      redirect_to user_url(@user, year: t.year, month: t.month, day: t.day, hour: t.hour, update: true)
     else
       flash.now[:_] = "×"
       # redirect_back(fallback_location: request.referer)
@@ -80,7 +78,7 @@ class TasksController < ApplicationController
     @task = @user.tasks.find(params[:id])
     @task.destroy
     flash[:_] = "⚪︎"
-    t = params[:ymd].to_time
+    t = params[:time].to_time
     redirect_to user_url(@user, year: t.year, month: t.month, day: t.day, hour: t.hour, update: true)
   end
 

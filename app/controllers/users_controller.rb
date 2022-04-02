@@ -30,7 +30,7 @@ class UsersController < ApplicationController
   end
 
   def edit
-    @time = time_hash(params[:year], params[:month], params[:day], params[:hour])
+    @time = params[:time].to_time
   end
 
   def update
@@ -52,7 +52,7 @@ class UsersController < ApplicationController
     time = (params[:ymd] + " " + params[:hour]).to_time.tomorrow
     @tasks = @user.tasks.where("finish_time > ?", Time.now).where("finish_time < ?", time)
     TaskMailer.send_tasks(@user, @tasks).deliver_now
-    flash[:mail] = "送信しました。"
+    flash[:mail] = "タスクを送信しました。"
     redirect_to @user
   end
 
@@ -118,6 +118,7 @@ class UsersController < ApplicationController
         time = prev_time ? @user.tasks.where(start_datetime: prev_time).order(:finish_time).last.finish_time.yesterday : nil
         time = time.beginning_of_hour.since(1.hour) if time && time.beginning_of_hour != time
       end
+      time = session_to_time if @time >= session_to_time.tomorrow
       @prev_time = time
     end
 
@@ -129,7 +130,7 @@ class UsersController < ApplicationController
         time = next_time && next_time < session_to_time ? next_time : session_to_time
       end
       @next_time = @time >= session_to_time.tomorrow ? nil : time
-      @next_time = session_to_time.tomorrow if session_to_time <= @time && @time < session_to_time.tomorrow
+      @next_time = session_to_time.tomorrow if session_to_time == @time
     end
 
     # methods

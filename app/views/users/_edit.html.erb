@@ -44,6 +44,7 @@
               </p>
             </div>
           <% else %>
+            <hr>
             <div class="d-grid d-md-flex gap-3 justify-content-md-center">
               <%= link_to "アカウント削除", user_path(@user), data: {confirm: "アカウントを削除します。"}, method: :delete, class: "btn btn-secondary" %>
             </div>

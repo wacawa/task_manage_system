@@ -16,6 +16,7 @@
           <button type="button" data-bs-target="#carouselExampleDark" data-bs-slide-to="6" aria-label="Slide 7"></button>
           <button type="button" data-bs-target="#carouselExampleDark" data-bs-slide-to="7" aria-label="Slide 8"></button>
           <button type="button" data-bs-target="#carouselExampleDark" data-bs-slide-to="8" aria-label="Slide 9"></button>
+          <button type="button" data-bs-target="#carouselExampleDark" data-bs-slide-to="9" aria-label="Slide 10"></button>
         </div>
         <div class="carousel-inner">
           <div class="carousel-item active">
@@ -75,8 +76,11 @@
           <div class="carousel-item">
             <%= image_tag("intro-6.png", class: "image mx-auto d-block") %>
             <div class="carousel-caption d-none d-md-block">
-              <h5>タスクの修正</h5>
-              <p>「タスク枠内」クリックで、修正が可能になります。</p>
+              <h5>タスクの修正と削除</h5>
+              <p>
+                「タスク枠内」クリックで、修正が可能になります。<br>
+                タスク右下の「×」ボタンで、タスクを削除できます。
+              </p>
             </div>
           </div>          
           <div class="carousel-item">
@@ -85,6 +89,17 @@
               <h5>退出・ログアウト</h5>
               <p>
                 「退出」すると、作成したすべてのタスクが削除されます。<br>
+                「アカウント登録」すると「ログアウト」に変わります。<br>
+                「ログアウト」しても、アカウントとタスクは削除されません。
+              </p>
+            </div>
+          </div>          
+          <div class="carousel-item">
+            <%= image_tag("intro-9.png", class: "image mx-auto d-block") %>
+            <div class="carousel-caption d-none d-md-block">
+              <h5>アカウント登録</h5>
+              <p>
+                ゲストアカウント<br>
                 「アカウント登録」すると「ログアウト」に変わります。<br>
                 「ログアウト」しても、アカウントとタスクは削除されません。
               </p>

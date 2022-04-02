@@ -17,7 +17,9 @@ class Task < ApplicationRecord
     user = User.find(user_id)
     timerangeset = user.tasks.where(start_datetime: start_datetime).pluck(:start_time, :finish_time)
     booleans = []
-    timerangeset.each do |s, f|
+    timerangeset.each do |s_time, f_time|
+      s = s_time
+      f = f_time
       if s.is_a?(Time) && f.is_a?(Time) && start_time.is_a?(Time) && finish_time.is_a?(Time) && start_datetime.is_a?(Time)
         now = start_time < start_datetime
         start = start_time >= s && start_time < f
@@ -27,6 +29,7 @@ class Task < ApplicationRecord
         equal = start_time.beginning_of_minute == finish_time.beginning_of_minute
         # if start || finish || sandf
         if now || start || finish || sandf || final || equal
+          debugger
           booleans << false
         end
       end
