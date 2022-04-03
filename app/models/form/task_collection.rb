@@ -39,7 +39,6 @@ class Form::TaskCollection < Form::Base
                 t.start_time = date
                 t.finish_time = finish_time
                 t.title = val.title
-                debugger
               end
             end
           end
@@ -48,7 +47,6 @@ class Form::TaskCollection < Form::Base
       # end
     end
     self.tasks.concat(plus)
-    debugger
   end
 
   def save
