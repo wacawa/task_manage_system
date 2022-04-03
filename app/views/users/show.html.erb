@@ -69,18 +69,20 @@
         <% for hour in [*@hour..@end_hour] do %>
           <% h = hour % 24 %>
           <% day = @day[1] if @hour != 0 && h == 0 %>
+          <% day = @day[1] if @end_hour == hour && h == 0 %>
           <% d = "%02d" % day %>
           <% h = "%02d" % h %>
           <% if hour != @end_hour %>
             <% for m in 0..59 do %>
               <% cname = m == 0 ? "hour" : "" %>
-              <% tomorrow = m == 0 && h == "00" ? "tomorrow" : "" %>
+              <% tomorrow = hour != @hour && m == 0 && h == "00" ? "tomorrow" : "" %>
               <% m = "%02d" % m %>
               <% dhm = "dhm_#{d+h+m}" %>
               <div class="<%= dhm %> <%= cname %> <%= tomorrow %>"><%= "#{h.to_i} : #{m}" if m == "00" %></div>
             <% end %>
           <% else %>
-            <div class="dhm_<%= d+h %>00 hour"><%= "#{h.to_i} : 00" %></div>
+            <% tomorrow = hour != @hour && h == "00" ? "tomorrow" : "" %>
+            <div class="dhm_<%= d+h %>00 hour <%= tomorrow %>"><%= "#{h.to_i} : 00" %></div>
           <% end %>
         <% end %>
       </div>
