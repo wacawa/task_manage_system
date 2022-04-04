@@ -99,7 +99,7 @@
     <% hash = {year: time.year, month: time.month, day: time.day, hour: time.hour, prev: true} %>
     <div class="prev">
       <%= link_to user_path(@user, hash) do %> 
-        <%= image_tag("arrow-left.png") %>
+        <%= image_tag("smaller_arrow_left.png") %>
       <% end %>
     </div>
   <% end %>
@@ -108,7 +108,7 @@
     <% hash = {year: time.year, month: time.month, day: time.day, hour: time.hour, next: true} %>
     <div class="next">
       <%= link_to user_path(@user, hash) do %> 
-        <%= image_tag("arrow-right.png") %>
+        <%= image_tag("smaller_arrow_right.png") %>
       <% end %>
     </div>
   <% end %>
@@ -116,7 +116,7 @@
     <% if @user.provider && @user.email.present? %>
       <div class="mail">
         <%= link_to send_mail_user_path(@user, ymd: l(@time, format: :ymd), hour: @time.hour), method: :post do %> <%# , data: {confirm: "ご登録のアドレス宛にタスクを送信します。"} %>
-          <%= image_tag("mail.png") %>
+          <%= image_tag("smaller_mail.png") %>
         <% end %>
       </div>
     <% end %>
@@ -124,13 +124,13 @@
   <% if @within || @over %>
     <div class="addtask">
       <%= link_to new_user_task_path(@user, ymd: l(@time, format: :ymd), day: @day[0], hour: @hour, over: @over), remote: true do %> 
-        <canvas id="plus" width="100" height="100"></canvas>
+        <canvas id="plus" width="50" height="50"></canvas>
       <% end %>
     </div>
   <% end %>
-  <div class="to_intro">
+  <div class="show_to_intro">
     <%= link_to intro_path, remote: true do %> 
-     <%= image_tag("question_mark.png") %>
+     <%= image_tag("smaller_question_mark.png") %>
     <% end %>
   </div>
 
