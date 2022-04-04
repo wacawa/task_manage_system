@@ -29,7 +29,6 @@ class Task < ApplicationRecord
         equal = start_time.beginning_of_minute == finish_time.beginning_of_minute
         # if start || finish || sandf
         if now || start || finish || sandf || final || equal
-          debugger
           booleans << false
         end
       end
